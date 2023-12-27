@@ -22,7 +22,7 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
+      secure: true, // Set to true in production with HTTPS
     });
     res.json({
       id: userSaved._id,
@@ -54,7 +54,7 @@ export const login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: false, // Set to true in production with HTTPS
+      secure: true, // Set to true in production with HTTPS
     });
     res.json({
       id: userFound._id,
