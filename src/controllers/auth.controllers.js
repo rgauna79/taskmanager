@@ -49,13 +49,18 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Incorrect password" });
 
-    const token = await createAccessToken({ id: userFound._id });
-    console.log(token);
+    try {
+      const token = await createAccessToken({ id: userFound._id });
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // Set to true in production with HTTPS
-    });
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: true, // Set to true in production with HTTPS
+      });
+      res.json({ message: token });
+    } catch (error) {
+      console.error("Token creation error:", error);
+      res.status(500).json({ message: error.message });
+    }
     res.json({
       id: userFound._id,
       username: userFound.username,
@@ -90,11 +95,10 @@ export const profile = async (req, res) => {
 
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;
-  
+
   if (!token) return res.status(401).json({ message: "Unauthorized" });
 
   jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-    
     if (error) return res.status(401).json({ message: "Unauthorized" });
 
     const userFound = await User.findById(user.id);
