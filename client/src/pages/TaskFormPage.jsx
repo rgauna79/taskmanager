@@ -35,7 +35,7 @@ export function TaskFormPage() {
     }
     if (params.id) {
      
-      updateTask(dataValid);
+      updateTask(params.id, dataValid);
     } else {
       
       createTask(dataValid);
