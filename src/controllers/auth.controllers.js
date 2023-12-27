@@ -77,7 +77,6 @@ export const login = async (req, res) => {
       console.error("Token creation error:", error);
       res.status(500).json({ message: error.message });
     }
-    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
