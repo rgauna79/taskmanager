@@ -9,7 +9,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { TaskProvider } from "./context/TasksContext";
 import Navbar from "./components/ui/Navbar";
-import "./app.css";
+// import "./app.css";
 
 function App() {
   return (
