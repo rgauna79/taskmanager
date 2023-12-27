@@ -21,26 +21,22 @@ export const register = async (req, res) => {
 
     const userSaved = await newUser.save();
 
-    try {
-      const token = await createAccessToken({ id: userSaved._id });
+    const token = await createAccessToken({ id: userSaved._id });
 
-      res.cookie("token", token, {
-        httpOnly: true,
-        secure: true, // Set to true in production with HTTPS
-        sameSite: "None", // Set SameSite attribute to None
-      });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true, // Set to true in production with HTTPS
+      sameSite: "None", // Set SameSite attribute to None
+      path: "/",
+    });
 
-      res.json({
-        id: userSaved._id,
-        username: userSaved.username,
-        email: userSaved.email,
-        createdAt: userSaved.createdAt,
-        updatedAt: userSaved.updatedAt,
-      });
-    } catch (error) {
-      console.error("Token creation error:", error);
-      res.status(500).json({ message: error.message });
-    }
+    res.json({
+      id: userSaved._id,
+      username: userSaved.username,
+      email: userSaved.email,
+      createdAt: userSaved.createdAt,
+      updatedAt: userSaved.updatedAt,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -59,13 +55,13 @@ export const login = async (req, res) => {
     if (!isMatch)
       return res.status(400).json({ message: "Incorrect password" });
 
-    try {
       const token = await createAccessToken({ id: userFound._id });
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: true, // Set to true in production with HTTPS
         sameSite: "None", // Set SameSite attribute to None
+        path: "/",
       });
 
       res.json({
@@ -75,10 +71,6 @@ export const login = async (req, res) => {
         createdAt: userFound.createdAt,
         updatedAt: userFound.updatedAt,
       });
-    } catch (error) {
-      console.error("Token creation error:", error);
-      res.status(500).json({ message: error.message });
-    }
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
