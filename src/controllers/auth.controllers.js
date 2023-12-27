@@ -10,6 +10,7 @@ export const register = async (req, res) => {
   try {
     const userFound = await User.findOne({ email });
     if (userFound) return res.status(400).json(["The email is already in use"]);
+
     const passwordHash = await bcrypt.hash(password, 10);
 
     const newUser = new User({
@@ -19,25 +20,26 @@ export const register = async (req, res) => {
     });
 
     const userSaved = await newUser.save();
+
     try {
-      const token = await createAccessToken({ id: userFound._id });
+      const token = await createAccessToken({ id: userSaved._id });
 
       res.cookie("token", token, {
         httpOnly: true,
         secure: true, // Set to true in production with HTTPS
       });
-      res.json({ message: token });
+
+      res.json({
+        id: userSaved._id,
+        username: userSaved.username,
+        email: userSaved.email,
+        createdAt: userSaved.createdAt,
+        updatedAt: userSaved.updatedAt,
+      });
     } catch (error) {
       console.error("Token creation error:", error);
       res.status(500).json({ message: error.message });
     }
-    res.json({
-      id: userSaved._id,
-      username: userSaved.username,
-      email: userSaved.email,
-      createdAt: userSaved.createdAt,
-      updatedAt: userSaved.updatedAt,
-    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -63,18 +65,19 @@ export const login = async (req, res) => {
         httpOnly: true,
         secure: true, // Set to true in production with HTTPS
       });
-      res.json({ message: token });
+
+      res.json({
+        id: userFound._id,
+        username: userFound.username,
+        email: userFound.email,
+        createdAt: userFound.createdAt,
+        updatedAt: userFound.updatedAt,
+      });
     } catch (error) {
       console.error("Token creation error:", error);
       res.status(500).json({ message: error.message });
     }
-    res.json({
-      id: userFound._id,
-      username: userFound.username,
-      email: userFound.email,
-      createdAt: userFound.createdAt,
-      updatedAt: userFound.updatedAt,
-    });
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
