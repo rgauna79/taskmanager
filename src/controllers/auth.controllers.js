@@ -24,10 +24,10 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token, {
-      httpOnly: true,
-      secure: true, // Set to true in production with HTTPS
-      sameSite: "None", // Set SameSite attribute to None
-      path: "/",
+      // httpOnly: true,
+      // secure: true, // Set to true in production with HTTPS
+      // sameSite: "None", // Set SameSite attribute to None
+      // path: "/",
     });
 
     res.json({
@@ -58,10 +58,10 @@ export const login = async (req, res) => {
       const token = await createAccessToken({ id: userFound._id });
 
       res.cookie("token", token, {
-        httpOnly: true,
-        secure: true, // Set to true in production with HTTPS
-        sameSite: "None", // Set SameSite attribute to None
-        path: "/",
+        // httpOnly: true,
+        // secure: true, // Set to true in production with HTTPS
+        // sameSite: "None", // Set SameSite attribute to None
+        // path: "/",
       });
 
       res.json({
