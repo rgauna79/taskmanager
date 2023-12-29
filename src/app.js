@@ -11,10 +11,10 @@ const app = express();
 app.use(
   cors({
     //Cors used Localhost
-    origin: "http://localhost:5173",
+    // origin: "http://localhost:5173",
     
     //Cors used with web service
-    // origin: "https://taskmanager-15ow.onrender.com",
+    origin: "https://taskmanager-15ow.onrender.com",
     credentials: true,
   })
 );
