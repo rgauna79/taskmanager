@@ -4,6 +4,13 @@ import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+const baseDomain = isProduction ? ".onrender.com" : "localhost";
+
+console.log(isProduction, baseDomain);
+
+
 export const register = async (req, res) => {
   const { email, password, username } = req.body;
 
@@ -25,9 +32,9 @@ export const register = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: true, // Set to true in production with HTTPS
-      sameSite: "None", // Set SameSite attribute to None
-      path: "https://task-manager-p62m.onrender.com",
+      secure: isProduction, // Set to true in production with HTTPS
+      sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
+      // domain: baseDomain,
     });
 
     res.json({
@@ -58,10 +65,11 @@ export const login = async (req, res) => {
       const token = await createAccessToken({ id: userFound._id });
 
       res.cookie("token", token, {
-        httpOnly: true,
-        secure: true, // Set to true in production with HTTPS
-        sameSite: "None", // Set SameSite attribute to None
-        path: "https://task-manager-p62m.onrender.com",
+         httpOnly: true,
+         secure: isProduction, // Set to true in production with HTTPS
+         sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
+         path: '/',
+        // domain: baseDomain,
       });
 
       res.json({
@@ -77,7 +85,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.cookie("token", "", { expires: new Date(0) });
+  res.cookie("token", "", { expires: new Date() - 1 });
 
   return res.sendStatus(200);
 };
@@ -98,20 +106,24 @@ export const profile = async (req, res) => {
 
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;
+  try {
+    if (!token) return res.status(401).json({ message: "Unauthorized" });
 
-  if (!token) return res.status(401).json({ message: "Unauthorized" });
-
-  jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-    if (error) return res.status(401).json({ message: "Unauthorized" });
-
-    const userFound = await User.findById(user.id);
-
-    if (!userFound) return res.status(401).json({ message: "Unauthorized" });
-
-    return res.json({
-      id: userFound._id,
-      username: userFound.username,
-      email: userFound.email,
+    jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+      if (error) return res.status(401).json({ message: "Unauthorized" });
+  
+      const userFound = await User.findById(user.id);
+  
+      if (!userFound) return res.status(401).json({ message: "Unauthorized" });
+  
+      return res.json({
+        id: userFound._id,
+        username: userFound.username,
+        email: userFound.email,
+      });
     });
-  });
+  } catch (error) {
+    console.log(error)
+  }
+
 };
