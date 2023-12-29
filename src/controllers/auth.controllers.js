@@ -24,10 +24,10 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token, {
-      // httpOnly: true,
+      httpOnly: true,
       secure: true, // Set to true in production with HTTPS
       sameSite: "None", // Set SameSite attribute to None
-      // path: "https://taskmanager-15ow.onrender.com",
+      path: "https://task-manager-p62m.onrender.com",
     });
 
     res.json({
@@ -61,7 +61,7 @@ export const login = async (req, res) => {
         httpOnly: true,
         secure: true, // Set to true in production with HTTPS
         sameSite: "None", // Set SameSite attribute to None
-        // path: "https://taskmanager-15ow.onrender.com",
+        path: "https://task-manager-p62m.onrender.com",
       });
 
       res.json({

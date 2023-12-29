@@ -27,7 +27,7 @@ export function TaskProvider({ children }) {
       const res = await getTasksRequest();
       setTasks(res.data);
     } catch (error) {
-      console.error(error);
+      console.error('error: ' + error);
     }
   };
 
