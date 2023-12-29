@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
-      console.log(res.data);
+      //console.log(res.data);
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
@@ -63,14 +63,16 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
-      console.log('cookies: ' + cookies.token);
+      console.log(Cookies.get())
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
         return setUser(null);
       }
       try {
+        console.log('checking token')
         const res = await verifyTokenRequest(cookies.token);
+        console.log(res)
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);
