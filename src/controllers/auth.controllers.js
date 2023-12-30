@@ -31,7 +31,7 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token, {
-      httpOnly: true,
+      // httpOnly: true,
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
       // domain: baseDomain,
@@ -106,6 +106,8 @@ export const profile = async (req, res) => {
 
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;
+  console.log(token)
+  console.log(TOKEN_SECRET)
   try {
     if (!token) return res.status(401).json({ message: "Unauthorized" });
 
