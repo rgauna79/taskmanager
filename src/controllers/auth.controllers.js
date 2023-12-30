@@ -6,7 +6,7 @@ import { TOKEN_SECRET } from "../config.js";
 
 const isProduction = process.env.NODE_ENV === 'production';
 
-const baseDomain = isProduction ? ".onrender.com" : "localhost";
+const baseDomain = isProduction ? ".task-manager-p62m.onrender.com" : "localhost";
 
 console.log(isProduction, baseDomain);
 
@@ -31,10 +31,11 @@ export const register = async (req, res) => {
     const token = await createAccessToken({ id: userSaved._id });
 
     res.cookie("token", token, {
-      // httpOnly: true,
+      httpOnly: isProduction,
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
-      // domain: baseDomain,
+      path: '/',
+      domain: baseDomain,
     });
 
     res.json({
@@ -69,7 +70,7 @@ export const login = async (req, res) => {
          secure: isProduction, // Set to true in production with HTTPS
          sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
          path: '/',
-        // domain: baseDomain,
+         domain: baseDomain,
       });
 
       res.json({
