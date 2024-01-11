@@ -42,11 +42,12 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setUser(res.data);
     } catch (error) {
-      // console.log(error)
-      if (Array.isArray(error.response.data)) {
-        return setErrors(error.response.data);
+      console.log(error);
+      if (error.response.data) {
+        if (Array.isArray(error.response.data)) {
+          return setErrors(error.response.data);
+        }
       }
-
       setErrors([error.response.data.message]);
     }
   };
