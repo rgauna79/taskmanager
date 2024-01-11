@@ -5,7 +5,6 @@ import { VITE_BACKEND_URL } from "./config";
 
 const instance = axios.create({
   baseURL: VITE_BACKEND_URL,
-  timeout: 1000,
   withCredentials: true,
 });
 
