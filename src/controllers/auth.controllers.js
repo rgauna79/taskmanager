@@ -79,7 +79,7 @@ export const login = async (req, res) => {
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
     });
-
+    console.log(res.cookie);
     res.json({
       id: userFound._id,
       username: userFound.username,
@@ -138,6 +138,6 @@ export const verifyToken = async (req, res) => {
       });
     });
   } catch (error) {
-    console.log(error);
+    console.log("error verifyng token: ", error);
   }
 };
