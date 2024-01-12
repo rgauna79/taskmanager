@@ -9,7 +9,12 @@ import path from "path";
 
 const app = express();
 console.log(FRONTEND_URL);
-app.use(cors());
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  }),
+);
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
