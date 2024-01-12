@@ -77,9 +77,9 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: isProduction,
       secure: isProduction, // Set to true in production with HTTPS
-      sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
+      //sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
     });
-    console.log(res.cookie);
+    console.log("cookie generated: ", res.cookie);
     res.json({
       id: userFound._id,
       username: userFound.username,
