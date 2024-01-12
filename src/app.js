@@ -8,23 +8,21 @@ import taskRoutes from "./routes/tasks.routes.js";
 import path from "path";
 
 const app = express();
-
+console.log(FRONTEND_URL);
 app.use(
   cors({
     origin: FRONTEND_URL,
     credentials: true,
-  })
+  }),
 );
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
 
-
 app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  
   app.use(express.static(path.resolve("client", "dist")));
 
   app.get("*", (req, res) => {
