@@ -17,7 +17,7 @@ function App() {
     <CookiesProvider>
       <AuthProvider>
         <TaskProvider>
-          <BrowserRouter>
+          <BrowserRouter >
             <main className="d-flex flex-column container-fluid  vh-100 px-5">
               <Navbar />
               <Routes>
