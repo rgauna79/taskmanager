@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [cookies, setCookies, deleteCookie] = useCookies();
 
   const signup = async (user) => {
     try {
@@ -38,7 +37,7 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
-      //console.log(res);
+      console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
     } catch (error) {
@@ -70,6 +69,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkLogin() {
       const cookies = Cookies.get();
+      console.log("checkLogin get cookie: ", cookies);
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
