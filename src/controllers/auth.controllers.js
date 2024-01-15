@@ -75,7 +75,7 @@ export const login = async (req, res) => {
     const token = await createAccessToken({ id: userFound._id });
     console.log("Generated Token:", token);
     res.cookie("token", token, {
-      // httpOnly: isProduction,
+      httpOnly: isProduction,
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
      });
