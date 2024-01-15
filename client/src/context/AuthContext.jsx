@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const signup = async (user) => {
     try {
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setUser(res.data);
         setIsAuthenticated(true);
+        //setCookie("token", res.data.token); 
       }
     } catch (error) {
       console.log(error);
@@ -40,6 +42,8 @@ export const AuthProvider = ({ children }) => {
       console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
+      //console.log(res.data.token)
+      //setCookie("token", res.data.token);
     } catch (error) {
       console.log(error);
       if (error.response.data) {
@@ -52,7 +56,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    Cookies.remove("token");
+    removeCookie("token");
+    // Cookies.remove("token");
     setIsAuthenticated(false);
     setUser(null);
   };
@@ -68,8 +73,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const cookies = Cookies.get();
-      console.log("checkLogin get cookie: ", cookies);
+      // const cookies = Cookies.get();
+      // console.log("checkLogin get cookie: ", cookies);
+      console.log("checkLogin get cookie: ", cookies.token);
       if (!cookies.token) {
         setIsAuthenticated(false);
         setLoading(false);
