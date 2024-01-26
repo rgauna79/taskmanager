@@ -42,4 +42,8 @@ app.get("/test-cookie", (req, res) => {
   res.send("Cookie set successfully!");
 });
 
+app.use("/", (req, res, next) => {
+  res.json({ message: "Api is running" });
+});
+
 export default app;

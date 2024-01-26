@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setUser(res.data);
         setIsAuthenticated(true);
-        //setCookie("token", res.data.token); 
+        //setCookie("token", res.data.token);
       }
     } catch (error) {
       console.log(error);
@@ -39,11 +39,11 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
-      console.log("Signin User data: ", res);
+      //console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
-      //console.log(res.data.token)
-      //setCookie("token", res.data.token);
+      console.log(res.data.token);
+      setCookie("token", res.data.token);
     } catch (error) {
       console.log(error);
       if (error.response.data) {
