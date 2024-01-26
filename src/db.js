@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 dotenv.config();
 
-const URI = process.env.MONGO_URI;
+const URI =
+  process.env.MONGO_URI ||
+  "mongodb+srv://rgauna:Rjg.12779@cluster0.5iwtzcp.mongodb.net/mern?retryWrites=true&w=majority";
 
 export const connectDB = async () => {
   try {

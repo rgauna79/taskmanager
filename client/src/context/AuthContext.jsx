@@ -42,8 +42,9 @@ export const AuthProvider = ({ children }) => {
       console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
-      console.log(res.data.token);
-      setCookie("token", res.data.token);
+      console.log("Signin cookies: ", cookies);
+      //console.log(res.data.token);
+      setCookie("token", res.data.token, { sameSite: "none", secure: true });
     } catch (error) {
       console.log(error);
       if (error.response.data) {
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     removeCookie("token");
-    // Cookies.remove("token");
+    Cookies.remove("token");
     setIsAuthenticated(false);
     setUser(null);
   };
@@ -73,7 +74,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const cookies = Cookies.get();
+      //const cookies = Cookies.get();
       console.log("checkLogin get cookie: ", cookies);
       if (!cookies.token) {
         setIsAuthenticated(false);
@@ -81,9 +82,9 @@ export const AuthProvider = ({ children }) => {
         return setUser(null);
       }
       try {
-        // console.log('checking token')
+        console.log("checking token: ", cookies.token);
         const res = await verifyTokenRequest(cookies.token);
-        // console.log(res)
+        //console.log(res);
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);
@@ -108,6 +109,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         errors,
         loading,
+        cookies,
       }}
     >
       {children}
