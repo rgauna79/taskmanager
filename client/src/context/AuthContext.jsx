@@ -44,11 +44,11 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       console.log("Signin cookies: ", cookies);
       //console.log(res.data.token);
-      // setCookie("token", res.data.token, {
-      //   sameSite: "none",
-      //   secure: true,
-      //   httpOnly: true,
-      // });
+      setCookie("token", res.data.token, {
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+      });
     } catch (error) {
       console.log(error);
       if (error.response.data) {
