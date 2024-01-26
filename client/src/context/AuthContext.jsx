@@ -42,13 +42,14 @@ export const AuthProvider = ({ children }) => {
       console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
-      console.log("Signin cookies: ", cookies);
+
       //console.log(res.data.token);
       setCookie("token", res.data.token, {
         sameSite: "none",
         secure: true,
         httpOnly: true,
       });
+      console.log("Signin cookies: ", cookies);
     } catch (error) {
       console.log(error);
       if (error.response.data) {
