@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
-      //console.log(res.data.token)
+      console.log(res.data.token);
       setCookie("token", res.data.token);
     } catch (error) {
       console.log(error);

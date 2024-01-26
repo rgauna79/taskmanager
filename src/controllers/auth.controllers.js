@@ -49,6 +49,7 @@ export const register = async (req, res) => {
       email: userSaved.email,
       createdAt: userSaved.createdAt,
       updatedAt: userSaved.updatedAt,
+      token: token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -78,7 +79,7 @@ export const login = async (req, res) => {
       httpOnly: isProduction,
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
-     });
+    });
 
     res.json({
       id: userFound._id,
