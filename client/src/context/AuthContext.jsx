@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
-//import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 import { useCookies } from "react-cookie";
 import { NODE_ENV } from "../api/config";
 
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setUser(res.data);
       setToken(res.data.token);
-      //setCookie("token", res.data.token, { path: "/" });
+      Cookies.set("token", res.data.token);
       setCookie("token", res.data.token, {
         path: "/",
         secure: NODE_ENV === "production",
