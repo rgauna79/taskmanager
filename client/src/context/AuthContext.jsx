@@ -53,6 +53,7 @@ export const AuthProvider = ({ children }) => {
         sameSite: NODE_ENV === "production" ? "None" : "Lax",
       });
       console.log("Signin cookies: ", cookies);
+      console.log("Environment: ", NODE_ENV);
     } catch (error) {
       console.log(error);
       if (error.response.data) {
@@ -103,8 +104,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
       }
     }
-
-    checkLogin();
+    checkLogin(NODE_ENV);
   }, []);
 
   return (
