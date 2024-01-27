@@ -74,7 +74,7 @@ export const login = async (req, res) => {
       });
 
     const token = await createAccessToken({ id: userFound._id });
-    console.log("isProduction:", isProduction);
+    console.log("Production: ", isProduction);
     console.log("Generated Token:", token);
     res.cookie("token", token, {
       httpOnly: isProduction,
@@ -116,19 +116,24 @@ export const logout = (req, res) => {
 
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;
-
+  console.log("token: ", token);
   try {
     if (!token) return res.send(false);
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
       if (error) {
         console.error("JWT Verification Error:", error);
-        return res.status(401).json({ message: "Unauthorized" });
+        return res
+          .status(401)
+          .json({ message: "Can't verify token. Unauthorized" });
       }
 
       const userFound = await User.findById(user.id);
 
-      if (!userFound) return res.status(401).json({ message: "Unauthorized" });
+      if (!userFound)
+        return res
+          .status(401)
+          .json({ message: "Unauthorized, user not found" });
 
       return res.json({
         id: userFound._id,
