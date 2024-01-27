@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 
 const isProduction = process.env.NODE_ENV === "production";
-console.log(isProduction);
+
 const baseDomain = isProduction
   ? ".task-manager-p62m.onrender.com"
   : "localhost";
@@ -74,6 +74,7 @@ export const login = async (req, res) => {
       });
 
     const token = await createAccessToken({ id: userFound._id });
+    console.log("isProduction:", isProduction);
     console.log("Generated Token:", token);
     res.cookie("token", token, {
       httpOnly: isProduction,

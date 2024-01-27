@@ -2,6 +2,7 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
 //import Cookies from "js-cookie";
 import { useCookies } from "react-cookie";
+import { NODE_ENV } from "../api/config";
 
 const AuthContext = createContext();
 
@@ -45,8 +46,12 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setUser(res.data);
       setToken(res.data.token);
-      setCookie("token", res.data.token, { path: "/" });
-
+      //setCookie("token", res.data.token, { path: "/" });
+      setCookie("token", res.data.token, {
+        path: "/",
+        secure: NODE_ENV === "production",
+        sameSite: NODE_ENV === "production" ? "None" : "Lax",
+      });
       console.log("Signin cookies: ", cookies);
     } catch (error) {
       console.log(error);
@@ -100,7 +105,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     checkLogin();
-  });
+  }, []);
 
   return (
     <AuthContext.Provider
