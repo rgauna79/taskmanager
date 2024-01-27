@@ -31,15 +31,8 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// Example route to test cookie setting
-app.get("/test-cookie", (req, res) => {
-  const token = "test-token"; // Replace with your actual token
-  res.cookie("token", token, {
-    httpOnly: isProduction,
-    secure: isProduction, // Set to true in production with HTTPS
-    sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None or Lax
-  });
-  res.send("Cookie set successfully!");
+app.use("/", (req, res, next) => {
+  res.json({ message: "Api is running" });
 });
 
 export default app;

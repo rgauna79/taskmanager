@@ -3,14 +3,8 @@ import bcrypt from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
-import { verifyTokenRequest } from "../../client/src/api/auth.js";
-import { cookie } from "express/lib/response.js";
 
 const isProduction = process.env.NODE_ENV === "production";
-
-const baseDomain = isProduction
-  ? ".task-manager-p62m.onrender.com"
-  : "localhost";
 
 export const register = async (req, res) => {
   try {
@@ -41,17 +35,14 @@ export const register = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: isProduction,
-      secure: isProduction, // Set to true in production with HTTPS
-      sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
+      secure: true, // Set to true in production with HTTPS
+      sameSite: "none", // Set SameSite attribute to None
     });
 
     res.json({
       id: userSaved._id,
       username: userSaved.username,
       email: userSaved.email,
-      createdAt: userSaved.createdAt,
-      updatedAt: userSaved.updatedAt,
-      token: token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -75,31 +66,22 @@ export const login = async (req, res) => {
         message: ["Incorrect password"],
       });
 
-    const token = await createAccessToken({ id: userFound._id });
+    const token = await createAccessToken({
+      id: userFound._id,
+      username: userFound.username,
+    });
     console.log("Production: ", isProduction);
     console.log("Generated Token:", token);
     res.cookie("token", token, {
-      httpOnly: isProduction,
-      secure: isProduction, // Set to true in production with HTTPS
-      sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
+      httpOnly: process.env.NODE_ENV !== "development",
+      secure: true,
+      sameSite: "none",
     });
-
-    //check if cookie is set correctly
-    cookie.set("token", token, {
-      httpOnly: isProduction,
-      secure: isProduction, // Set to true in production with HTTPS
-      sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
-    });
-
-    console.log(cookie.get("token"));
 
     res.json({
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
-      createdAt: userFound.createdAt,
-      updatedAt: userFound.updatedAt,
-      token: token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -107,7 +89,11 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("token", { path: "/" });
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(0),
+  });
   return res.sendStatus(200);
 };
 
@@ -126,9 +112,9 @@ export const logout = (req, res) => {
 // };
 
 export const verifyToken = async (req, res) => {
-  const { token } = req.cookies;
-  console.log("token: ", token);
   try {
+    const { token } = req.cookies;
+
     if (!token) return res.send(false);
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
