@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import { createAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
+import { verifyTokenRequest } from "../../client/src/api/auth.js";
+import { cookie } from "express/lib/response.js";
 
 const isProduction = process.env.NODE_ENV === "production";
 
@@ -81,6 +83,15 @@ export const login = async (req, res) => {
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
     });
+
+    //check if cookie is set correctly
+    cookie.set("token", token, {
+      httpOnly: isProduction,
+      secure: isProduction, // Set to true in production with HTTPS
+      sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
+    });
+
+    console.log(cookie.get("token"));
 
     res.json({
       id: userFound._id,
