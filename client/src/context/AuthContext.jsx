@@ -1,6 +1,6 @@
 import { createContext, useState, useContext, useEffect } from "react";
 import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
-import Cookies from "js-cookie";
+//import Cookies from "js-cookie";
 import { useCookies } from "react-cookie";
 
 const AuthContext = createContext();
@@ -15,6 +15,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +27,8 @@ export const AuthProvider = ({ children }) => {
       if (res.status === 200) {
         setUser(res.data);
         setIsAuthenticated(true);
-        //setCookie("token", res.data.token);
+        setToken(res.data.token);
+        setCookie("token", res.data.token);
       }
     } catch (error) {
       console.log(error);
@@ -42,13 +44,9 @@ export const AuthProvider = ({ children }) => {
       console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
+      setToken(res.data.token);
+      setCookie("token", res.data.token, { path: "/" });
 
-      //console.log(res.data.token);
-      setCookie("token", res.data.token, {
-        sameSite: "none",
-        secure: true,
-        httpOnly: true,
-      });
       console.log("Signin cookies: ", cookies);
     } catch (error) {
       console.log(error);
@@ -62,8 +60,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    removeCookie("token");
-    Cookies.remove("token");
+    removeCookie("token", { path: "/" });
+    // Cookies.remove("token");
     setIsAuthenticated(false);
     setUser(null);
   };
@@ -79,17 +77,17 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      //const cookies = Cookies.get();
-      console.log("checkLogin get cookie: ", cookies);
-      if (!cookies.token) {
+      const tokenFromCookie = cookies.token;
+
+      if (!tokenFromCookie) {
+        console.log("no token");
         setIsAuthenticated(false);
         setLoading(false);
         return setUser(null);
       }
       try {
-        console.log("checking token: ", cookies.token);
-        const res = await verifyTokenRequest(cookies.token);
-        //console.log(res);
+        const res = await verifyTokenRequest(tokenFromCookie);
+        // console.log(res)
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
         setUser(res.data);
@@ -102,7 +100,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     checkLogin();
-  }, []);
+  });
 
   return (
     <AuthContext.Provider
@@ -114,7 +112,7 @@ export const AuthProvider = ({ children }) => {
         isAuthenticated,
         errors,
         loading,
-        cookies,
+        token,
       }}
     >
       {children}

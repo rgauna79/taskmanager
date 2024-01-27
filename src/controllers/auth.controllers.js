@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 
 const isProduction = process.env.NODE_ENV === "production";
-
+console.log(isProduction);
 const baseDomain = isProduction
   ? ".task-manager-p62m.onrender.com"
   : "localhost";
@@ -74,14 +74,13 @@ export const login = async (req, res) => {
       });
 
     const token = await createAccessToken({ id: userFound._id });
-    console.log("is production: ", isProduction);
+    console.log("Generated Token:", token);
     res.cookie("token", token, {
       httpOnly: isProduction,
       secure: isProduction, // Set to true in production with HTTPS
       sameSite: isProduction ? "None" : "Lax", // Set SameSite attribute to None
     });
 
-    console.log(res.cookie);
     res.json({
       id: userFound._id,
       username: userFound.username,
@@ -96,11 +95,7 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.cookie("token", "", {
-    httpOnly: true,
-    secure: true,
-    expires: new Date(0),
-  });
+  res.clearCookie("token", { path: "/" });
   return res.sendStatus(200);
 };
 
@@ -120,7 +115,7 @@ export const logout = (req, res) => {
 
 export const verifyToken = async (req, res) => {
   const { token } = req.cookies;
-  console.log("token: ", token);
+
   try {
     if (!token) return res.send(false);
 
