@@ -72,8 +72,9 @@ export const login = async (req, res) => {
     });
     console.log("Production: ", isProduction);
     console.log("Generated Token:", token);
+
     res.cookie("token", token, {
-      httpOnly: process.env.NODE_ENV !== "development",
+      httpOnly: isProduction,
       secure: true,
       sameSite: "none",
     });
@@ -82,6 +83,7 @@ export const login = async (req, res) => {
       id: userFound._id,
       username: userFound.username,
       email: userFound.email,
+      token: token,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

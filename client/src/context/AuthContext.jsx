@@ -1,7 +1,12 @@
 import { createContext, useState, useContext, useEffect } from "react";
-import { registerRequest, loginRequest, verifyTokenRequest } from "../api/auth";
-import Cookies from "js-cookie";
-//import { useCookies } from "react-cookie";
+import {
+  registerRequest,
+  loginRequest,
+  verifyTokenRequest,
+  logoutRequest,
+} from "../api/auth";
+// import Cookies from "js-cookie";
+// import { useCookies } from "react-cookie";
 import { NODE_ENV } from "../api/config";
 
 const AuthContext = createContext();
@@ -19,7 +24,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-  //const [cookies, setCookie, removeCookie] = useCookies(["token"]);
+  // const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const signup = async (user) => {
     try {
@@ -42,7 +47,10 @@ export const AuthProvider = ({ children }) => {
       //console.log("Signin User data: ", res);
       setIsAuthenticated(true);
       setUser(res.data);
-      //setToken(res.data.token);
+      sessionStorage.setItem("token", res.data.token);
+      //setCookie("token", res.data.token, { path: "/", sameSite: "none" });
+      // console.log("Signin cookies: ", cookies);
+      //(res.data.token);
       // if (!Cookies.get("token")) {
       //   console.log("No token in cookies");
       // setCookie("token", res.data.token, {
@@ -64,8 +72,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
-    Cookies.remove("token");
+  const logout = async () => {
+    sessionStorage.removeItem("token");
+    // Cookies.remove("token");
+    // removeCookie("token");
+    await logoutRequest();
     setIsAuthenticated(false);
     setUser(null);
   };
@@ -81,15 +92,16 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const cookies = Cookies.get();
-      if (!cookies.token) {
+      const cookies = sessionStorage.getItem("token");
+      // console.log("checkLogin cookies: ", cookies);
+      if (!cookies) {
         console.log("no token");
         setIsAuthenticated(false);
         setLoading(false);
         return setUser(null);
       }
       try {
-        const res = await verifyTokenRequest(cookies.token);
+        const res = await verifyTokenRequest(cookies);
         // console.log(res)
         if (!res.data) return setIsAuthenticated(false);
         setIsAuthenticated(true);
