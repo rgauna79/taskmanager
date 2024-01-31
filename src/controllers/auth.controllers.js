@@ -115,7 +115,7 @@ export const logout = (req, res) => {
 
 export const verifyToken = async (req, res) => {
   try {
-    const { token } = req.cookies;
+    const { token } = req.cookies || sessionStorage.getItem("token");
     console.log("token: ", token);
     if (!token) return res.send(false);
 
