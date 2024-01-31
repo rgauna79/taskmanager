@@ -7,7 +7,7 @@ import {
 } from "../api/auth";
 // import Cookies from "js-cookie";
 // import { useCookies } from "react-cookie";
-import { NODE_ENV } from "../api/config";
+// import { NODE_ENV } from "../api/config";
 
 const AuthContext = createContext();
 
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
-      //console.log("Signin User data: ", res);
+
       setIsAuthenticated(true);
       setUser(res.data);
       sessionStorage.setItem("token", res.data.token);
