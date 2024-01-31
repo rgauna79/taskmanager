@@ -71,7 +71,6 @@ export const login = async (req, res) => {
       username: userFound.username,
     });
     console.log("Production: ", isProduction);
-    console.log("Generated Token:", token);
 
     res.cookie("token", token, {
       httpOnly: isProduction,
@@ -115,8 +114,8 @@ export const logout = (req, res) => {
 
 export const verifyToken = async (req, res) => {
   try {
-    const { token } = req.cookies || sessionStorage.getItem("token");
-    console.log("token: ", token);
+    const { token } = req.cookies;
+
     if (!token) return res.send(false);
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {

@@ -5,7 +5,7 @@ import {
   verifyTokenRequest,
   logoutRequest,
 } from "../api/auth";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 // import { useCookies } from "react-cookie";
 // import { NODE_ENV } from "../api/config";
 
@@ -48,19 +48,13 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       setUser(res.data);
       sessionStorage.setItem("token", res.data.token);
-      //setCookie("token", res.data.token, { path: "/", sameSite: "none" });
-      // console.log("Signin cookies: ", cookies);
-      //(res.data.token);
-      // if (!Cookies.get("token")) {
-      //   console.log("No token in cookies");
+
       // setCookie("token", res.data.token, {
       //   path: "/",
       //   secure: NODE_ENV === "production",
       //   sameSite: NODE_ENV === "production" ? "None" : "Lax",
       // });
       // }
-      // console.log("Signin cookies: ", cookies);
-      // console.log("Signin token: ", Cookies.get("token"));
     } catch (error) {
       console.log(error);
       if (error.response.data) {
@@ -74,7 +68,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     sessionStorage.removeItem("token");
-    // Cookies.remove("token");
+    Cookies.remove("token");
     // removeCookie("token");
     await logoutRequest();
     setIsAuthenticated(false);
