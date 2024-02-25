@@ -17,7 +17,7 @@ function App() {
       <AuthProvider>
         <TaskProvider>
           <BrowserRouter >
-            <main className="d-flex flex-column container-fluid  vh-100 px-5">
+            <main className="d-flex flex-column container-fluid  vh-100 px-2">
               <Navbar />
               <Routes>
                 <Route path="/" element={<HomePage />} />

@@ -11,7 +11,7 @@ function TaskCard({ task }) {
 
   const { deleteTask } = useTasks();
   return (
-    <div className="bg-secondary rounded mb-4 mx-4 p-2" style={cardStyle}>
+    <div className="bg-secondary rounded mb-4 mx-4 p-2 container-sm" >
       <header className="d-flex justify-content-between">
         <h1 className="fs-3 font-weight-bold">{task.title}</h1>
         <div className="d-flex gap-2 align-items-center">

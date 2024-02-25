@@ -10,7 +10,7 @@ function TasksPage() {
 
   if (tasks.lenght == 0) return <h1>No Tasks</h1>;
   return (
-    <div className=" d-flex mx-auto flex-wrap justify-content-center">
+    <div className=" d-flex mx-auto flex-wrap justify-content-center container-sm">
       {tasks.map((task) => (
         <TaskCard task={task} key={task._id}></TaskCard>
       ))}

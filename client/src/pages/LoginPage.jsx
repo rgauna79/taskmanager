@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
 
 function LoginPage() {
   const {
@@ -12,9 +14,14 @@ function LoginPage() {
 
   const { signin, errors: signinErrors, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = handleSubmit((data) => {
-    signin(data);
+  const onSubmit = handleSubmit(async (data) => {
+    setLoading(true);
+    try {
+      await signin(data);
+    } catch (error) {}
+    setLoading(false);
   });
 
   useEffect(() => {
@@ -54,7 +61,14 @@ function LoginPage() {
           )}
 
           <button className="btn btn-primary m-2" type="submit">
-            Login
+            {loading ? (
+              <>
+                <FontAwesomeIcon icon={faSpinner} spin />
+                <span className="ml-2">Loading</span>
+              </>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         <p className="d-flex justify-content-between">
