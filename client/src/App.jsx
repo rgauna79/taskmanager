@@ -20,19 +20,19 @@ function App() {
           <span className="visually-hidden">Loading...</span>
         </div>
       </div>
-    )
+    );
   }
   return (
-   
-      <AuthProvider>
-        <TaskProvider>
-          <BrowserRouter >
-            <main className="d-flex flex-column container-fluid  vh-100 px-2">
-              <Navbar />
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
+    <AuthProvider>
+      <TaskProvider>
+        <BrowserRouter>
+          <main className="d-flex flex-column container-fluid   px-2">
+            <Navbar />
+
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
 
               <Route element={<ProtectedRoutes />}>
                 <Route path="/tasks" element={<TasksPage />} />

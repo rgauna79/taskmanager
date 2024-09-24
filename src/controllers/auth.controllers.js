@@ -40,7 +40,6 @@ export const register = async (req, res) => {
       sameSite: isProduction ? "none" : "lax",
     });
 
-
     res.json({
       id: userSaved._id,
       username: userSaved.username,
@@ -72,15 +71,12 @@ export const login = async (req, res) => {
       id: userFound._id,
       username: userFound.username,
     });
-    // console.log("Production: ", isProduction);
-
     // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "none" : "lax",
     });
-
 
     res.json({
       id: userFound._id,
@@ -120,7 +116,6 @@ export const logout = (req, res) => {
 export const verifyToken = async (req, res) => {
   try {
     const { token } = req.cookies;
-
     if (!token) return res.status(401).json({ message: "Token not provided" });
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
@@ -143,4 +138,3 @@ export const verifyToken = async (req, res) => {
     res.status(500).json({ message: "Server error while verifying token" });
   }
 };
-
