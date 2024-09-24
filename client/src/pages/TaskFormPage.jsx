@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useTasks } from "../context/TasksContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useTaskLoader } from "../hooks/useTaskLoader";
+import dayjs from "dayjs";
 
 export function TaskFormPage() {
   const { register, handleSubmit, setValue } = useForm();
@@ -14,7 +15,7 @@ export function TaskFormPage() {
   const onSubmit = handleSubmit((data) => {
     const dataValid = {
       ...data,
-      dueDate: data.dueDate ? dayjs.utc(data.dueDate).format() : dayjs.utc().format(),
+      dueDate: data.dueDate ? dayjs.utc(data.dueDate).format("YYYY-MM-DD") : dayjs.utc().format("YYYY-MM-DD"),
     };
     if (params.id) {
       updateTask(params.id, dataValid);
