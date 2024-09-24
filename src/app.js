@@ -23,11 +23,11 @@ app.use("/api/auth", authRoutes);
 app.use("/api", taskRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.resolve("client", "dist")));
+  app.use(express.static(path.resolve("src", "client", "dist")));
 
   app.get("*", (req, res) => {
-    console.log(path.resolve("client", "dist", "index.html"));
-    res.sendFile(path.resolve("client", "dist", "index.html"));
+    console.log(path.resolve("src", "client", "dist", "index.html"));
+    res.sendFile(path.resolve("src", "client", "dist", "index.html"));
   });
 }
 
