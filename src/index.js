@@ -36,7 +36,7 @@ async function main() {
       }
     });
 
-    const servingPath = path.resolve('src', 'client', 'dist');
+    const servingPath = path.resolve('client', 'dist');
     console.log(`Serving files from: ${servingPath}`);
   } catch (error) {
     console.log(error);

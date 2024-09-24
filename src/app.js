@@ -33,9 +33,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use("/", (req, res, next) => {
   res.json({ message: "Api is running" });
-    console.log(`Server listening on port ${PORT}`);
-  console.log(`Current directory: ${process.cwd()}`); // Muestra la ruta actual
-  console.log(`Serving files from: ${path.resolve('src', 'client', 'dist')}`); // Muestra la ruta de los archivos estáticos
+    
 
 });
 
