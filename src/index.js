@@ -10,6 +10,9 @@ async function main() {
     connectDB();
     app.listen(PORT);
     console.log("Server listening on port", PORT);
+    console.log(`Current directory: ${process.cwd()}`); 
+    console.log(`Serving files from: ${path.resolve('src', 'client', 'dist')}`); 
+  
   } catch (error) {
     console.log(error);
   }
