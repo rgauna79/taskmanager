@@ -16,23 +16,21 @@ async function main() {
     const currentDirectory = process.cwd();
     console.log(`Current directory: ${currentDirectory}`);
 
-    fs.readdir(currentDirectory, (err, items) => {
+    const clientPath = path.resolve('client');
+    fs.readdir(clientPath, (err, files) => {
       if (err) {
-        console.error("Error reading current directory:", err);
+        console.error("Error reading client directory:", err);
       } else {
-        items.forEach(item => {
-          fs.stat(path.join(currentDirectory, item), (err, stats) => {
-            if (err) {
-              console.error(`Error getting stats for ${item}:`, err);
-            } else {
-              if (stats.isDirectory()) {
-                console.log(`[DIR] ${item}`);
-              } else {
-                console.log(`[FILE] ${item}`);
-              }
-            }
-          });
-        });
+        console.log("Files and directories in 'client':", files);
+      }
+    });
+
+    const srcPath = path.resolve('src');
+    fs.readdir(srcPath, (err, files) => {
+      if (err) {
+        console.error("Error reading src directory:", err);
+      } else {
+        console.log("Files and directories in 'src':", files);
       }
     });
 
