@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import TasksPage from "./pages/TasksPage";
 import { TaskFormPage } from "./pages/TaskFormPage";
 import HomePage from "./pages/HomePage";
@@ -12,6 +12,16 @@ import Navbar from "./components/ui/Navbar";
 import "./App.css";
 
 function App() {
+  const { loading } = useAuth();
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <div className="spinner-border text-primary" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    )
+  }
   return (
    
       <AuthProvider>

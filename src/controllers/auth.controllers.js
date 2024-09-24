@@ -33,11 +33,13 @@ export const register = async (req, res) => {
     //create acces token
     const token = await createAccessToken({ id: userSaved._id });
 
+    // Set cookie
     res.cookie("token", token, {
-      httpOnly: isProduction,
-      secure: true, // Set to true in production with HTTPS
-      sameSite: "none", // Set SameSite attribute to None
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     });
+
 
     res.json({
       id: userSaved._id,
@@ -70,13 +72,15 @@ export const login = async (req, res) => {
       id: userFound._id,
       username: userFound.username,
     });
-    console.log("Production: ", isProduction);
+    // console.log("Production: ", isProduction);
 
+    // Set cookie
     res.cookie("token", token, {
-      httpOnly: isProduction,
-      secure: true,
-      sameSite: "none",
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "lax",
     });
+
 
     res.json({
       id: userFound._id,
@@ -92,7 +96,8 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
-    secure: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     expires: new Date(0),
   });
   return res.sendStatus(200);
@@ -116,22 +121,17 @@ export const verifyToken = async (req, res) => {
   try {
     const { token } = req.cookies;
 
-    if (!token) return res.send(false);
+    if (!token) return res.status(401).json({ message: "Token not provided" });
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
       if (error) {
         console.error("JWT Verification Error:", error);
-        return res
-          .status(401)
-          .json({ message: "Can't verify token. Unauthorized" });
+        return res.status(401).json({ message: "Invalid token" });
       }
 
       const userFound = await User.findById(user.id);
-
       if (!userFound)
-        return res
-          .status(401)
-          .json({ message: "Unauthorized, user not found" });
+        return res.status(401).json({ message: "User not found" });
 
       return res.json({
         id: userFound._id,
@@ -140,6 +140,7 @@ export const verifyToken = async (req, res) => {
       });
     });
   } catch (error) {
-    console.log("error verifyng token: ", error);
+    res.status(500).json({ message: "Server error while verifying token" });
   }
 };
+

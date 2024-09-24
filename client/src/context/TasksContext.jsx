@@ -6,6 +6,7 @@ import {
   updateTasksRequest,
   deleteTasksRequest,
 } from "../api/tasks";
+import { set } from "mongoose";
 
 const TaskContext = createContext();
 
@@ -21,13 +22,16 @@ export const useTasks = () => {
 
 export function TaskProvider({ children }) {
   const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState(null);
 
   const getTasks = async () => {
     try {
       const res = await getTasksRequest();
       setTasks(res.data);
+      setError(null);
     } catch (error) {
-      console.error('error: ' + error);
+      setError(error.message);
+      console.error("error: " + error);
     }
   };
 
@@ -37,19 +41,31 @@ export function TaskProvider({ children }) {
       // console.log(res.data)
       return res.data;
     } catch (error) {
-      console.error(error);
+      setError(error.message);
+      console.error(error.message);
     }
   };
 
   const createTask = async (task) => {
-    const res = await createTasksRequest(task);
+    try {
+      const res = await createTasksRequest(task);
+      setTasks([...tasks, res.data]);
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+      console.error(error);
+    }
   };
 
   const deleteTask = async (id) => {
     try {
       const res = await deleteTasksRequest(id);
-      if (res.status === 204) setTasks(tasks.filter((task) => task._id != id));
+      if (res.status === 204) {
+        setError(null);
+        setTasks(tasks.filter((task) => task._id != id));
+      }
     } catch (error) {
+      setError(error.message);
       console.error(error);
     }
   };
@@ -58,15 +74,17 @@ export function TaskProvider({ children }) {
     // console.log(id, task)
     try {
       const res = await updateTasksRequest(id, task);
-      // console.log(res)
+      setTasks(tasks.map((task) => (task._id === id ? res.data : task)));
+      setError(null);
     } catch (error) {
+      setError(error.message);
       console.error(error);
     }
   };
 
   return (
     <TaskContext.Provider
-      value={{ tasks, getTask, updateTask, deleteTask, createTask, getTasks }}
+      value={{ tasks, getTask, updateTask, deleteTask, createTask, getTasks, error }}
     >
       {children}
     </TaskContext.Provider>

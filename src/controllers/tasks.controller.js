@@ -1,4 +1,5 @@
 import Task from "../models/task.models.js";
+import { handleResponse } from "../middlewares/response.middleware.js";
 
 export const getTasks = async (req, res) => {
   try {
@@ -34,10 +35,12 @@ export const createTask = async (req, res) => {
 export const getTask = async (req, res) => {
   try {
     const task = await Task.findById(req.params.id).populate("user");
-    if (!task) return res.status(404).json({ message: "Task not found" });
-    res.json(task);
+    if (!task) {
+      return handleResponse(res, { message: "Task not found" }, 404);
+    }
+    return handleResponse(res, task);
   } catch (error) {
-    return res.status(404).json({ message: "Task not found" });
+    return handleResponse(res, { message: error.message }, 500);
   }
 };
 

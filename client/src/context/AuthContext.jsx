@@ -89,7 +89,7 @@ export const AuthProvider = ({ children }) => {
       const cookies = sessionStorage.getItem("token");
       // console.log("checkLogin cookies: ", cookies);
       if (!cookies) {
-        console.log("no token");
+        // console.log("no token");
         setIsAuthenticated(false);
         setLoading(false);
         return setUser(null);
@@ -97,13 +97,19 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await verifyTokenRequest(cookies);
         // console.log(res)
-        if (!res.data) return setIsAuthenticated(false);
+        if (!res.data) {
+           setIsAuthenticated(false);
+           sessionStorage.removeItem("token");
+           return setUser(null);
+        }
         setIsAuthenticated(true);
         setUser(res.data);
-        setLoading(false);
       } catch (error) {
         console.log("error :" + error);
         setIsAuthenticated(false);
+        sessionStorage.removeItem("token");
+
+      } finally {
         setLoading(false);
       }
     }
