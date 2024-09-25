@@ -5,21 +5,17 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
 function TaskCard({ task }) {
-  const cardStyle = {
-    minWidth: "28rem",
-  };
-
   const { deleteTask } = useTasks();
   return (
-    <div className="bg-secondary rounded mb-4 mx-4 p-2 container-sm" >
-      <header className="d-flex justify-content-between">
+    <div className="bg-secondary rounded p-3">
+      <header className="d-flex justify-content-between align-items-start">
         <h1 className="fs-3 font-weight-bold">{task.title}</h1>
         <div className="d-flex gap-2 align-items-center">
           <button
             onClick={() => {
               deleteTask(task._id);
             }}
-            className="btn btn-danger mr-2"
+            className="btn btn-danger"
           >
             delete
           </button>
@@ -28,9 +24,11 @@ function TaskCard({ task }) {
           </Link>
         </div>
       </header>
-      <p className="">{task.description}</p>
-      <p>Priority: {task.priority}</p>
-      <p>Due Date: {dayjs(task.dueDate).utc().format('MM/DD/YYYY')}</p>
+      <p className="small">{task.description}</p>
+      <p className="small">Priority: {task.priority}</p>
+      <p className="small">
+        Due Date: {dayjs(task.dueDate).utc().format("MM/DD/YYYY")}
+      </p>
     </div>
   );
 }
