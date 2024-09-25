@@ -1,12 +1,6 @@
-body {
-    min-width: 28rem;
+.custom-link {
+  text-decoration: none;
 }
-
-.custom-link  {
-    text-decoration: none;
-  
+ul {
+  list-style: none;
 }
-ul{
-    list-style: none;
-}
-

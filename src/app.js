@@ -32,7 +32,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(servingPath, "index.html"));
   });
 }
-
 app.use("/", (req, res, next) => {
   res.json({ message: "Api is running" });
     

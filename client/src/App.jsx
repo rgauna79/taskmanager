@@ -26,22 +26,27 @@ function App() {
     <AuthProvider>
       <TaskProvider>
         <BrowserRouter>
-          <main className="d-flex flex-column container-fluid   px-2">
+          <div
+            className="d-flex flex-column min-vh-100"
+            style={{ minWidth: "320px" }}
+          >
             <Navbar />
 
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
+            <main className="d-flex flex-column flex-grow-1 justify-content-center align-items-center container-fluid px-2">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
 
-              <Route element={<ProtectedRoutes />}>
-                <Route path="/tasks" element={<TasksPage />} />
-                <Route path="/add-task" element={<TaskFormPage />} />
-                <Route path="/tasks/:id" element={<TaskFormPage />} />
-                <Route path="/profile" element={<ProfilePage />} />
-              </Route>
-            </Routes>
-          </main>
+                <Route element={<ProtectedRoutes />}>
+                  <Route path="/tasks" element={<TasksPage />} />
+                  <Route path="/add-task" element={<TaskFormPage />} />
+                  <Route path="/tasks/:id" element={<TaskFormPage />} />
+                  <Route path="/profile" element={<ProfilePage />} />
+                </Route>
+              </Routes>
+            </main>
+          </div>
         </BrowserRouter>
       </TaskProvider>
     </AuthProvider>

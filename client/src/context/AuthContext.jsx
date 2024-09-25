@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const isProduction = process.env.NODE_ENV === "production";
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
@@ -48,38 +48,56 @@ export const AuthProvider = ({ children }) => {
       // Set the token in cookies
       Cookies.set("token", res.data.token, {
         path: "/",
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        secure: isProduction,
+        sameSite: "None",
       });
+
+      console.log("Token set in cookies:", res.data.token);
+      sessionStorage.setItem("token", res.data.token);
     } catch (error) {
       console.log(error);
-      setErrors(error.response?.data ? error.response.data : ["Login error"]);
+      setErrors(
+        error.response?.data.message
+          ? error.response.data.message
+          : error.response.data
+      );
+
+      // }
     }
   };
 
   const logout = async () => {
+    
+    try {
+      await logoutRequest();
     Cookies.remove("token", { path: "/" });
-    await logoutRequest();
+    sessionStorage.removeItem("token");
     setIsAuthenticated(false);
     setUser(null);
+    } catch (error) {
+      console.log("Error during logout:", error);
+    }
   };
 
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
+  // useEffect(() => {
+  //   if (errors.length > 0) {
+  //     const timer = setTimeout(() => {
+  //       setErrors([]);
+  //     }, 5000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [errors]);
 
   useEffect(() => {
     async function checkLogin() {
-      const token = Cookies.get("token");
+      const token = Cookies.get("token") || sessionStorage.getItem("token");
+      // console.log("token for check login: ", token);
+
       if (!token) {
         setIsAuthenticated(false);
         setUser(null);
-        return setLoading(false);
+        setLoading(false);
+        return;
       }
       try {
         const res = await verifyTokenRequest(token);
@@ -87,9 +105,7 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           setUser(res.data);
         } else {
-          setIsAuthenticated(false);
-          Cookies.remove("token", { path: "/" });
-          setUser(null);
+          throw new Error("Invalid token response");
         }
       } catch (error) {
         console.log("Error verifying token:", error);

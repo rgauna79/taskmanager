@@ -12,7 +12,7 @@ function LoginPage() {
     formState: { errors },
   } = useForm();
 
-  const { signin, errors: signinErrors, isAuthenticated } = useAuth();
+  const { signin, errors: signinError, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -20,7 +20,9 @@ function LoginPage() {
     setLoading(true);
     try {
       await signin(data);
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
     setLoading(false);
   });
 
@@ -34,11 +36,12 @@ function LoginPage() {
         className="bg-secondary max-width-md p-4 rounded"
         style={{ width: "400px" }}
       >
-        {signinErrors.map((error, i) => (
+        {signinError.map((error, i) => (
           <div className="bg-danger text-white p-2  mb-2" key={i}>
             {error}
           </div>
         ))}
+
         <h1 className="fs-1 fw-bold">Login</h1>
 
         <form onSubmit={onSubmit}>
@@ -64,7 +67,7 @@ function LoginPage() {
             {loading ? (
               <>
                 <FontAwesomeIcon icon={faSpinner} spin />
-                <span className="ml-2">Loading</span>
+                <span className="ml-2"> Loading</span>
               </>
             ) : (
               "Login"

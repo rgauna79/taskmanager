@@ -1,6 +1,11 @@
 import axios from "./axios";
+const token = sessionStorage.getItem("token");
 
-export const getTasksRequest = () => axios.get("/tasks");
+export const getTasksRequest = () => axios.get("/tasks", {
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
 
 export const getTaskRequest = (id) => axios.get(`/tasks/${id}`);
 
