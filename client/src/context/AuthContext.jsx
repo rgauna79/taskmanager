@@ -6,8 +6,6 @@ import {
   logoutRequest,
 } from "../api/auth";
 import Cookies from "js-cookie";
-// import { useCookies } from "react-cookie";
-// import { NODE_ENV } from "../api/config";
 
 const AuthContext = createContext();
 
@@ -24,7 +22,6 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-  // const [cookies, setCookie, removeCookie] = useCookies(["token"]);
 
   const signup = async (user) => {
     try {
@@ -35,9 +32,9 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error);
-      if (error.response.data) {
-        setErrors(error.response.data);
-      }
+      setErrors(
+        error.response?.data ? error.response.data : ["Registration error"]
+      );
     }
   };
 
@@ -47,29 +44,21 @@ export const AuthProvider = ({ children }) => {
 
       setIsAuthenticated(true);
       setUser(res.data);
-      sessionStorage.setItem("token", res.data.token);
 
-      // setCookie("token", res.data.token, {
-      //   path: "/",
-      //   secure: NODE_ENV === "production",
-      //   sameSite: NODE_ENV === "production" ? "None" : "Lax",
-      // });
-      // }
+      // Set the token in cookies
+      Cookies.set("token", res.data.token, {
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      });
     } catch (error) {
       console.log(error);
-      if (error.response.data) {
-        if (Array.isArray(error.response.data)) {
-          return setErrors(error.response.data);
-        }
-      }
-      setErrors([error.response.data.message]);
+      setErrors(error.response?.data ? error.response.data : ["Login error"]);
     }
   };
 
   const logout = async () => {
-    sessionStorage.removeItem("token");
-    Cookies.remove("token");
-    // removeCookie("token");
+    Cookies.remove("token", { path: "/" });
     await logoutRequest();
     setIsAuthenticated(false);
     setUser(null);
@@ -86,29 +75,27 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const cookies = sessionStorage.getItem("token");
-      // console.log("checkLogin cookies: ", cookies);
-      if (!cookies) {
-        // console.log("no token");
+      const token = Cookies.get("token");
+      if (!token) {
         setIsAuthenticated(false);
-        setLoading(false);
-        return setUser(null);
+        setUser(null);
+        return setLoading(false);
       }
       try {
-        const res = await verifyTokenRequest(cookies);
-        // console.log(res)
-        if (!res.data) {
-           setIsAuthenticated(false);
-           sessionStorage.removeItem("token");
-           return setUser(null);
+        const res = await verifyTokenRequest(token);
+        if (res.data) {
+          setIsAuthenticated(true);
+          setUser(res.data);
+        } else {
+          setIsAuthenticated(false);
+          Cookies.remove("token", { path: "/" });
+          setUser(null);
         }
-        setIsAuthenticated(true);
-        setUser(res.data);
       } catch (error) {
-        console.log("error :" + error);
+        console.log("Error verifying token:", error);
         setIsAuthenticated(false);
-        sessionStorage.removeItem("token");
-
+        Cookies.remove("token", { path: "/" });
+        setUser(null);
       } finally {
         setLoading(false);
       }
