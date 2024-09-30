@@ -13,7 +13,7 @@ export function useTaskLoader(taskId, setValue) {
   useEffect(() => {
     async function loadTask() {
       if (taskId) {
-        console.log(taskId)
+        // console.log(taskId)
         try {
           const response = await getTask(taskId);
           const task = response.data;
@@ -24,7 +24,6 @@ export function useTaskLoader(taskId, setValue) {
             "dueDate",
             task.dueDate ? dayjs(task.dueDate).utc().format("YYYY-MM-DD") : ""
           );
-          console.log(task)
         } catch (error) {
           console.error("Failed to load task:", error);
           setError("Task not found or could not be loaded.");

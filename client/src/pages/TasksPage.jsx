@@ -24,7 +24,7 @@ function TasksPage() {
       <div className="container">
         <div className="row">
           {tasks.map((task) => (
-            <div className="col-12 col-sm-12 col-lg-6 mb-4" key={task.id}>
+            <div className="col-12 col-sm-12 col-lg-6 mb-4" key={task._id}>
               <TaskCard task={task} />
             </div>
           ))}

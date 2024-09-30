@@ -51,31 +51,43 @@ export const AuthProvider = ({ children }) => {
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       });
+
+      //set token to session storage
+      sessionStorage.setItem("token", res.data.token);
     } catch (error) {
       console.log(error);
-      setErrors(error.response?.data ? error.response.data : ["Login error"]);
+      setErrors(
+        error.response?.data.message
+          ? error.response.data.message
+          : error.response.data
+      );
+
+      // }
     }
   };
 
   const logout = async () => {
     Cookies.remove("token", { path: "/" });
+    sessionStorage.removeItem("token");
     await logoutRequest();
     setIsAuthenticated(false);
     setUser(null);
   };
 
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => {
-        setErrors([]);
-      }, 5000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
+  // useEffect(() => {
+  //   if (errors.length > 0) {
+  //     const timer = setTimeout(() => {
+  //       setErrors([]);
+  //     }, 5000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [errors]);
 
   useEffect(() => {
     async function checkLogin() {
-      const token = Cookies.get("token");
+      const token = Cookies.get("token") || sessionStorage.getItem("token");
+      // console.log("token for check login: ", token);
+
       if (!token) {
         setIsAuthenticated(false);
         setUser(null);
