@@ -14,7 +14,7 @@ export const getTasks = async (req, res) => {
 
 export const createTask = async (req, res) => {
   try {
-    const { title, description, dueDate, priority, status } = req.body;
+    const { title, description, dueDate, priority, status, tags } = req.body;
     const newTask = new Task({
       title,
       description,
@@ -22,6 +22,7 @@ export const createTask = async (req, res) => {
       priority,
       status: false,
       user: req.user.id,
+      tags,
     });
 
     await newTask.save();

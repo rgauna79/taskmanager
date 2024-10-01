@@ -22,6 +22,7 @@ export const useTasks = () => {
 export function TaskProvider({ children }) {
   const [tasks, setTasks] = useState([]);
   const [error, setError] = useState(null);
+  const allTags = [...new Set(tasks.flatMap((task) => task.tags))];
 
   const getTasks = async () => {
     try {
@@ -86,9 +87,9 @@ export function TaskProvider({ children }) {
       const res = await updateTasksRequest(id, { status });
 
       setTasks((prevTasks) =>
-      prevTasks.map((task) => (task._id === id ? res.data : task))
-    );
-    
+        prevTasks.map((task) => (task._id === id ? res.data : task))
+      );
+
       setError(null);
     } catch (error) {
       setError(error.message);
@@ -98,7 +99,17 @@ export function TaskProvider({ children }) {
 
   return (
     <TaskContext.Provider
-      value={{ tasks, getTask, updateTask, deleteTask, createTask, getTasks, updateTaskStatus,error }}
+      value={{
+        tasks,
+        getTask,
+        updateTask,
+        deleteTask,
+        createTask,
+        getTasks,
+        updateTaskStatus,
+        error,
+        allTags,
+      }}
     >
       {children}
     </TaskContext.Provider>

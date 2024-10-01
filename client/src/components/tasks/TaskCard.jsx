@@ -40,11 +40,24 @@ function TaskCard({ task }) {
       </header>
       <p className="small my-1">{task.description}</p>
 
-      <span
-        className={`badge ${priorityStyles[task.priority] || "bg-secondary"}`}
-      >
-        {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
-      </span>
+      <div className="d-flex align-items-center flex-wrap">
+        <p className="small my-1 me-2">Priority: </p>
+        <span
+          className={`badge ${priorityStyles[task.priority] || "bg-secondary"}`}
+        >
+          {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+        </span>
+      </div>
+
+      <div className="tags d-flex flex-wrap align-items-center">
+        <p className="small my-1 me-2">Tags: </p>
+        {task.tags &&
+          task.tags.map((tag) => (
+            <span key={tag} className="badge bg-info me-1 ">
+              {tag}
+            </span>
+          ))}
+      </div>
 
       <p className="small my-1">
         Due Date: {dayjs(task.dueDate).utc().format("MM/DD/YYYY")}

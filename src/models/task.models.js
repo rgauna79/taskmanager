@@ -27,6 +27,7 @@ const taskSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    tags: [{ type: String }],
   },
   {
     timestamps: true,

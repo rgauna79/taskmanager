@@ -28,11 +28,11 @@ function App() {
         <BrowserRouter>
           <div
             className="d-flex flex-column min-vh-100"
-            style={{ minWidth: "320px" }}
+            style={{ minWidth: "370px" }}
           >
             <Navbar />
 
-            <main className="d-flex flex-column flex-grow-1 justify-content-center align-items-center container-fluid px-2">
+            <main className="d-flex flex-column flex-grow-1 align-items-center container-fluid px-2">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />

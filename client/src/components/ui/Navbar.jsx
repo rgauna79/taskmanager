@@ -2,10 +2,13 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { Navbar, Nav } from "react-bootstrap";
 import { useState } from "react";
+import { useTheme } from "../../hooks/useTheme";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 function CustomNavbar() {
   const { isAuthenticated, logout, user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const { toggleTheme, isDarkMode } = useTheme();
 
   const handleToggle = () => setIsOpen(!isOpen);
   const handleClose = () => setIsOpen(false);
@@ -23,6 +26,13 @@ function CustomNavbar() {
           onClick={handleLinkClick}
         >
           <h1 className="fs-1 fw-bold">Task manager</h1>
+          <button
+            onClick={toggleTheme}
+            className="btn btn-secondary px-0 py-1 rounded d-flex align-items-center"
+            aria-label="Toggle Dark Mode"
+          >
+            {isDarkMode ? <FaSun /> : <FaMoon />}
+          </button>
         </Link>
       </Navbar.Brand>
       <Navbar.Toggle onClick={handleToggle} aria-controls="basic-navbar-nav" />
