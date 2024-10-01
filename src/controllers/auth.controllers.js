@@ -94,7 +94,7 @@ export const logout = (req, res) => {
   res.cookie("token", "", {
     httpOnly: true,
     secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
+    sameSite: "None",
     expires: new Date(0),
   });
   return res.sendStatus(200);
@@ -117,7 +117,6 @@ export const logout = (req, res) => {
 export const verifyToken = async (req, res) => {
   try {
     const { token } = req.cookies;
-    console.log(token);
     if (!token) return res.status(401).json({ message: "Token not provided" });
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {

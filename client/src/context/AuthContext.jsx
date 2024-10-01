@@ -22,7 +22,8 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [errors, setErrors] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  s;
+  const isProduction = process.env.NODE_ENV === "production";
   const signup = async (user) => {
     try {
       const res = await registerRequest(user);
@@ -67,11 +68,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
-    Cookies.remove("token", { path: "/" });
-    sessionStorage.removeItem("token");
-    await logoutRequest();
-    setIsAuthenticated(false);
-    setUser(null);
+    try {
+      await logoutRequest();
+      Cookies.remove("token", { path: "/" });
+      sessionStorage.removeItem("token");
+      setIsAuthenticated(false);
+      setUser(null);
+    } catch (error) {
+      console.log("Error during logout:", error);
+    }
   };
 
   // useEffect(() => {
@@ -91,7 +96,8 @@ export const AuthProvider = ({ children }) => {
       if (!token) {
         setIsAuthenticated(false);
         setUser(null);
-        return setLoading(false);
+        setLoading(false);
+        return;
       }
       try {
         const res = await verifyTokenRequest(token);
@@ -99,12 +105,10 @@ export const AuthProvider = ({ children }) => {
           setIsAuthenticated(true);
           setUser(res.data);
         } else {
-          setIsAuthenticated(false);
-          Cookies.remove("token", { path: "/" });
-          setUser(null);
+          throw new Error("Invalid token response");
         }
       } catch (error) {
-        console.log("Error verifying token:", error);
+        console.log("Error verifying token:", error.response.data.message);
         setIsAuthenticated(false);
         Cookies.remove("token", { path: "/" });
         setUser(null);

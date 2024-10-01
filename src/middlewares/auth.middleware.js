@@ -3,13 +3,20 @@ import { TOKEN_SECRET } from "../config.js";
 
 export const auth = (req, res, next) => {
   try {
-    // console.log("Cookies in request:", req.cookies);
-    const { token } = req.cookies;
+    let { token } = req.cookies;
 
-    if (!token)
-      return res
-        .status(401)
-        .json({ message: "No token, authorization denied" });
+    if (!token) {
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res
+          .status(401)
+          .json({ message: "No token, authorization denied" });
+      }
+
+      token = authHeader.split(" ")[1];
+      console.log("token: ", token);
+    }
 
     jwt.verify(token, TOKEN_SECRET, (err, user) => {
       if (err) {
