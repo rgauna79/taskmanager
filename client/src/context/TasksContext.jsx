@@ -81,9 +81,24 @@ export function TaskProvider({ children }) {
     }
   };
 
+  const updateTaskStatus = async (id, status) => {
+    try {
+      const res = await updateTasksRequest(id, { status });
+
+      setTasks((prevTasks) =>
+      prevTasks.map((task) => (task._id === id ? res.data : task))
+    );
+    
+      setError(null);
+    } catch (error) {
+      setError(error.message);
+      console.error(error);
+    }
+  };
+
   return (
     <TaskContext.Provider
-      value={{ tasks, getTask, updateTask, deleteTask, createTask, getTasks, error }}
+      value={{ tasks, getTask, updateTask, deleteTask, createTask, getTasks, updateTaskStatus,error }}
     >
       {children}
     </TaskContext.Provider>

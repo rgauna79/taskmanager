@@ -44,15 +44,13 @@ export const AuthProvider = ({ children }) => {
 
       setIsAuthenticated(true);
       setUser(res.data);
-
       // Set the token in cookies
       Cookies.set("token", res.data.token, {
         path: "/",
-        secure: isProduction,
-        sameSite: "None",
+        // secure: isProduction,
+        // sameSite: isProduction ? "none" : "lax",
       });
 
-      console.log("Token set in cookies:", res.data.token);
       sessionStorage.setItem("token", res.data.token);
     } catch (error) {
       console.log(error);
@@ -79,14 +77,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // useEffect(() => {
-  //   if (errors.length > 0) {
-  //     const timer = setTimeout(() => {
-  //       setErrors([]);
-  //     }, 5000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [errors]);
+  useEffect(() => {
+    if (errors.length > 0) {
+      const timer = setTimeout(() => {
+        setErrors([]);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [errors]);
 
   useEffect(() => {
     async function checkLogin() {
@@ -108,7 +106,7 @@ export const AuthProvider = ({ children }) => {
           throw new Error("Invalid token response");
         }
       } catch (error) {
-        console.log("Error verifying token:", error);
+        console.log("Error verifying token:", error.response.data.message);
         setIsAuthenticated(false);
         Cookies.remove("token", { path: "/" });
         setUser(null);

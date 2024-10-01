@@ -37,7 +37,7 @@ export const register = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: "None",
+      sameSite: isProduction ? "none" : "lax",
     });
 
     res.json({
@@ -75,7 +75,7 @@ export const login = async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: "None",
+      sameSite: isProduction ? "none" : "lax",
     });
    
 
@@ -118,7 +118,6 @@ export const logout = (req, res) => {
 export const verifyToken = async (req, res) => {
   try {
     const { token } = req.cookies;
-    console.log(token);
     if (!token) return res.status(401).json({ message: "Token not provided" });
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
