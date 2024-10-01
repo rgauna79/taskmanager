@@ -19,7 +19,7 @@ const taskSchema = new mongoose.Schema(
       required: true,
     },
     status: {
-      type: String,
+      type: Boolean,
       default: false,
     },
     user: {

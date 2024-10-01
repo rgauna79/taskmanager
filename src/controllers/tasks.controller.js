@@ -20,7 +20,7 @@ export const createTask = async (req, res) => {
       description,
       dueDate,
       priority,
-      status,
+      status: false,
       user: req.user.id,
     });
 
