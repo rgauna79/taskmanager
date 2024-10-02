@@ -47,11 +47,11 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
 
       // Set the token in cookies
-      Cookies.set("token", res.data.token, {
-        path: "/",
+      Cookies.set("authToken", res.data.token, {
+        // path: "/",
         // httpOnly: true,
-        // secure: process.env.NODE_ENV === "production",
-        // sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       });
 
       //set token to session storage
@@ -91,8 +91,10 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     async function checkLogin() {
-      const token = Cookies.get("token") || sessionStorage.getItem("token");
-      // console.log("token for check login: ", token);
+      const token = Cookies.get("authToken") || sessionStorage.getItem("token");
+      
+      console.log("token for check login from cookie: ", Cookies.get("authToken"));
+      console.log("token for check login from session: ", sessionStorage.getItem("token"));
 
       if (!token) {
         setIsAuthenticated(false);
