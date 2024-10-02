@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
       // Set the token in cookies
       Cookies.set("authToken", res.data.token, {
         // path: "/",
-        // httpOnly: true,
+        httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       });
