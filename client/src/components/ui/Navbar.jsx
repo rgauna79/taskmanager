@@ -4,6 +4,7 @@ import { Navbar, Nav } from "react-bootstrap";
 import { useState } from "react";
 import { useTheme } from "../../hooks/useTheme";
 import { FaSun, FaMoon } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 function CustomNavbar() {
   const { isAuthenticated, logout, user } = useAuth();
@@ -15,6 +16,12 @@ function CustomNavbar() {
 
   const handleLinkClick = () => {
     handleClose();
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleClose();
+    toast.success("Logged out successfully");
   };
 
   return (
@@ -54,10 +61,7 @@ function CustomNavbar() {
                 <Link
                   to="/"
                   className="text-white bg-primary px-4 py-1 rounded text-decoration-none"
-                  onClick={() => {
-                    logout();
-                    handleClose();
-                  }}
+                  onClick={handleLogout}
                 >
                   Logout
                 </Link>

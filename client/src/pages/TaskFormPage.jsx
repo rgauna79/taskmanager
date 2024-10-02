@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useTaskLoader } from "../hooks/useTaskLoader";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
 
 export function TaskFormPage() {
   const { register, handleSubmit, setValue, getValues } = useForm();
@@ -36,9 +37,21 @@ export function TaskFormPage() {
       tags,
     };
     if (params.id) {
-      updateTask(params.id, dataValid);
+      updateTask(params.id, dataValid)
+        .then(() => {
+          toast.success("Task updated successfully!");
+        })
+        .catch(() => {
+          toast.error("Failed to update task.");
+        });
     } else {
-      createTask(dataValid);
+      createTask(dataValid)
+        .then(() => {
+          toast.success("Task created successfully!");
+        })
+        .catch(() => {
+          toast.error("Failed to update task.");
+        });
     }
     navigate("/tasks");
   });

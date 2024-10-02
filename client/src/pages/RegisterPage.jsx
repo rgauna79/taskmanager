@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function RegisterPage() {
   const {
@@ -19,7 +20,12 @@ function RegisterPage() {
   //console.log(user);
 
   const onSubmit = handleSubmit(async (values) => {
-    signup(values);
+    try {
+      signup(values);
+      toast.success("User register successful");
+    } catch (error) {
+      console.log(error);
+    }
   });
   return (
     <div className="d-flex align-items-center justify-content-center  pb-4 flex-grow-1">

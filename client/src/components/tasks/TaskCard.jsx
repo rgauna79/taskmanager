@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 import React from "react";
+import { toast } from "react-toastify";
 
 dayjs.extend(utc);
 
@@ -18,6 +19,16 @@ function TaskCard({ task }) {
   function handleStatusChange() {
     const newStatus = !task.status;
     updateTaskStatus(task._id, newStatus);
+    toast.success(
+      `Task "${task.title}" marked as ${
+        newStatus ? "completed" : "incomplete"
+      }.`
+    );
+  }
+
+  function handleDelete() {
+    deleteTask(task._id);
+    toast.info(`Task "${task.title}" has been deleted.`);
   }
 
   const isExpired = dayjs().isAfter(dayjs(task.dueDate).utc());
@@ -27,10 +38,7 @@ function TaskCard({ task }) {
       <header className="d-flex justify-content-between align-items-center">
         <h1 className="fs-3 font-weight-bold mb-0">{task.title}</h1>
         <div className="d-flex gap-2 align-items-center">
-          <button
-            onClick={() => deleteTask(task._id)}
-            className="btn btn-danger"
-          >
+          <button onClick={handleDelete} className="btn btn-danger">
             Delete
           </button>
           <Link to={`/tasks/${task._id}`} className="btn btn-primary">

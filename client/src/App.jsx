@@ -10,6 +10,8 @@ import ProtectedRoutes from "./routes";
 import { TaskProvider } from "./context/TasksContext";
 import Navbar from "./components/ui/Navbar";
 import "./App.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const { loading } = useAuth();
@@ -45,6 +47,7 @@ function App() {
                   <Route path="/profile" element={<ProfilePage />} />
                 </Route>
               </Routes>
+              <ToastContainer position="top-right" autoClose={2000} />
             </main>
           </div>
         </BrowserRouter>

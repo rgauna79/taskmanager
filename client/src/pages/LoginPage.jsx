@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 function LoginPage() {
   const {
@@ -20,14 +21,18 @@ function LoginPage() {
     setLoading(true);
     try {
       await signin(data);
+      toast.success("Login successfully");
     } catch (error) {
       console.log(error);
+      toast.error("Login failed. Please check your credentials.");
     }
     setLoading(false);
   });
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/tasks");
+    if (isAuthenticated) {
+      navigate("/tasks");
+    }
   }, [isAuthenticated]);
 
   return (
