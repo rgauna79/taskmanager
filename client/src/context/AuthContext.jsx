@@ -48,8 +48,8 @@ export const AuthProvider = ({ children }) => {
 
       // Set the token in cookies
       Cookies.set("authToken", res.data.token, {
-        path: "/",
-        httpOnly: true,
+        // path: "/",
+        // httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       });
@@ -92,11 +92,20 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     async function checkLogin() {
       const token = Cookies.get("authToken") || sessionStorage.getItem("token");
-      
-      console.log("token for check login from cookie frontend: ", Cookies.get("authToken"));
-      console.log("token for check login from cookie backend: ", Cookies.get("token"));
 
-      console.log("token for check login from session: ", sessionStorage.getItem("token"));
+      // console.log(
+      //   "token for check login from cookie frontend: ",
+      //   Cookies.get("authToken")
+      // );
+      // console.log(
+      //   "token for check login from cookie backend: ",
+      //   Cookies.get("token")
+      // );
+
+      // console.log(
+      //   "token for check login from session: ",
+      //   sessionStorage.getItem("token")
+      // );
 
       if (!token) {
         setIsAuthenticated(false);

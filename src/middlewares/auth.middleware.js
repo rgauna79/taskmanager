@@ -15,7 +15,6 @@ export const auth = (req, res, next) => {
       }
 
       token = authHeader.split(" ")[1];
-      console.log("token: ", token);
     }
 
     jwt.verify(token, TOKEN_SECRET, (err, user) => {

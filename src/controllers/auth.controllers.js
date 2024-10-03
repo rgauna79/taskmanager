@@ -116,15 +116,23 @@ export const logout = (req, res) => {
 
 export const verifyToken = async (req, res) => {
   try {
-    const { token } = req.cookies;
-    if (!token) return res.status(401).json({ message: "Token not provided" });
+    let { token } = req.cookies;
+
+    if (!token) {
+      const authHeader = req.headers.authorization;
+      token = authHeader.split(" ")[1];
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res
+          .status(401)
+          .json({ message: "No token, authorization denied" });
+      }
+    }
 
     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
       if (error) {
         console.error("JWT Verification Error:", error);
         return res.status(401).json({ message: "Invalid token" });
       }
-
       const userFound = await User.findById(user.id);
       if (!userFound)
         return res.status(401).json({ message: "User not found" });
