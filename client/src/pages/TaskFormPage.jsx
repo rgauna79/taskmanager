@@ -5,6 +5,8 @@ import { useTaskLoader } from "../hooks/useTaskLoader";
 import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 
 export function TaskFormPage() {
   const { register, handleSubmit, setValue, getValues } = useForm();
@@ -56,9 +58,20 @@ export function TaskFormPage() {
     navigate("/tasks");
   });
 
+  const handleCancel = () => {
+    navigate("/tasks");
+  };
+
   return (
     <div className="d-flex align-items-center justify-content-center pb-4 flex-grow-1">
-      <div className="bg-secondary p-4 rounded">
+      <div className="bg-secondary p-4 rounded position-relative">
+        <button
+          className="btn btn-link position-absolute top-0 end-0 p-2"
+          onClick={handleCancel}
+          title="Cancel"
+        >
+          <FontAwesomeIcon icon={faTimes} size="lg" />
+        </button>
         {/* load error */}
         {loadError && <div className="alert alert-danger">{loadError}</div>}
 
@@ -112,7 +125,9 @@ export function TaskFormPage() {
               onChange={handleTagsChange}
             />
           </fieldset>
-          <button className="btn bg-primary">Save</button>
+          <div className="d-flex justify-content-center">
+            <button className="btn bg-primary">Save</button>
+          </div>
         </form>
       </div>
     </div>

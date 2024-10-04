@@ -42,17 +42,20 @@ export const AuthProvider = ({ children }) => {
   const signin = async (user) => {
     try {
       const res = await loginRequest(user);
+      if (res.status === 200) {
+        setIsAuthenticated(true);
+        setUser(res.data);
+        // Set the token in cookies
 
-      setIsAuthenticated(true);
-      setUser(res.data);
-
-      // Set the token in cookies
-      Cookies.set("authToken", res.data.token, {
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      });
+        Cookies.set("authToken", res.data.token, {
+          secure: process.env.NODE_ENV === "production",
+          sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+        });
+        return true;
+      }
+      return false;
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       setErrors(
         error.response?.data.message
           ? error.response.data.message

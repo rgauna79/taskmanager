@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import {
   createTasksRequest,
   getTaskRequest,
@@ -24,7 +24,7 @@ export function TaskProvider({ children }) {
   const [error, setError] = useState(null);
   const allTags = [...new Set(tasks.flatMap((task) => task.tags))];
 
-  const getTasks = async () => {
+  const getTasks = useCallback(async () => {
     try {
       const res = await getTasksRequest();
       setTasks(res.data);
@@ -33,7 +33,7 @@ export function TaskProvider({ children }) {
       setError(error.message);
       console.error("error: " + error);
     }
-  };
+  }, []);
 
   const getTask = async (id) => {
     try {

@@ -18,9 +18,8 @@ function App() {
   if (loading) {
     return (
       <div className="d-flex justify-content-center align-items-center vh-100">
-        <div className="spinner-border text-primary" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
+        <div className="spinner-border text-primary" role="status"></div>
+        <span className="visually-hidden">Loading...</span>
       </div>
     );
   }
@@ -34,7 +33,7 @@ function App() {
           >
             <Navbar />
 
-            <main className="d-flex flex-column flex-grow-1 align-items-center container-fluid px-2">
+            <main className="d-flex flex-column flex-grow-1 align-items-center justify-content-center  container-fluid px-2">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />

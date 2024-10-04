@@ -1,6 +1,12 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function HomePage() {
+  const { isAuthenticated } = useAuth();
+  if (isAuthenticated) {
+    return <Navigate to="/tasks" />;
+  }
+
   return (
     <section className="d-flex justify-content-center align-items-center flex-grow-1">
       <div className="container">

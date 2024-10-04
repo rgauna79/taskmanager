@@ -19,11 +19,10 @@ function LoginPage() {
 
   const onSubmit = handleSubmit(async (data) => {
     setLoading(true);
-    try {
-      await signin(data);
+    const success = await signin(data);
+    if (success) {
       toast.success("Login successfully");
-    } catch (error) {
-      console.log(error);
+    } else {
       toast.error("Login failed. Please check your credentials.");
     }
     setLoading(false);

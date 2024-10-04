@@ -6,6 +6,7 @@ const useCheckLogin = (setIsAuthenticated, setUser, setLoading) => {
   useEffect(() => {
     async function checkLogin() {
       const token = Cookies.get("authToken");
+      setLoading(true);
 
       if (!token) {
         setIsAuthenticated(false);

@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import { useTasks } from "../context/TasksContext";
 import TaskCard from "../components/tasks/TaskCard";
 import { Link } from "react-router-dom";
+import useFetchTasks from "../hooks/useFetchTasks.js";
 
 function TasksPage() {
-  const { getTasks, tasks, error, allTags } = useTasks();
+  // const { getTasks, tasks, error, allTags } = useTasks();
+  const { allTags } = useTasks();
   const [filter, setFilter] = useState("all");
   const [selectedTag, setSelectedTag] = useState("");
   const [sortOption, setSortBy] = useState("title");
+  const { loading, error, tasks } = useFetchTasks();
 
   const handleSortChange = (e) => {
     setSortBy(e.target.value);
@@ -32,9 +35,14 @@ function TasksPage() {
     return 0;
   });
 
-  useEffect(() => {
-    getTasks();
-  }, []);
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center align-items-center ">
+        <div className="spinner-border text-primary me-2" role="status"></div>
+        <span>Loading Tasks</span>
+      </div>
+    );
+  }
 
   if (error) return <h1>Error: {error}</h1>;
   if (tasks.length == 0) return <h1>No Tasks</h1>;
