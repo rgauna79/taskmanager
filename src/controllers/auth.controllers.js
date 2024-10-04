@@ -114,36 +114,36 @@ export const logout = (req, res) => {
 //   });
 // };
 
-export const verifyToken = async (req, res) => {
-  try {
-    let { token } = req.cookies;
+// export const verifyToken = async (req, res) => {
+//   try {
+//     let { token } = req.cookies;
 
-    if (!token) {
-      const authHeader = req.headers.authorization;
-      token = authHeader.split(" ")[1];
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res
-          .status(401)
-          .json({ message: "No token, authorization denied" });
-      }
-    }
+//     if (!token) {
+//       const authHeader = req.headers.authorization;
+//       token = authHeader.split(" ")[1];
+//       if (!authHeader || !authHeader.startsWith("Bearer ")) {
+//         return res
+//           .status(401)
+//           .json({ message: "No token, authorization denied" });
+//       }
+//     }
 
-    jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-      if (error) {
-        console.error("JWT Verification Error:", error);
-        return res.status(401).json({ message: "Invalid token" });
-      }
-      const userFound = await User.findById(user.id);
-      if (!userFound)
-        return res.status(401).json({ message: "User not found" });
+//     jwt.verify(token, TOKEN_SECRET, async (error, user) => {
+//       if (error) {
+//         console.error("JWT Verification Error:", error);
+//         return res.status(401).json({ message: "Invalid token" });
+//       }
+//       const userFound = await User.findById(user.id);
+//       if (!userFound)
+//         return res.status(401).json({ message: "User not found" });
 
-      return res.json({
-        id: userFound._id,
-        username: userFound.username,
-        email: userFound.email,
-      });
-    });
-  } catch (error) {
-    res.status(500).json({ message: "Server error while verifying token" });
-  }
-};
+//       return res.json({
+//         id: userFound._id,
+//         username: userFound.username,
+//         email: userFound.email,
+//       });
+//     });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error while verifying token" });
+//   }
+// };

@@ -12,14 +12,16 @@ import { createTaskSchema } from "../schemas/task.schema.js";
 
 const router = Router();
 
-router.get("/tasks", auth, getTasks);
+router.use(auth);
 
-router.get("/tasks/:id", auth, getTask);
+router.get("/tasks", getTasks);
 
-router.post("/tasks", auth, validateSchema(createTaskSchema), createTask);
+router.get("/tasks/:id", getTask);
 
-router.delete("/tasks/:id", auth, deleteTask);
+router.post("/tasks", validateSchema(createTaskSchema), createTask);
 
-router.put("/tasks/:id", auth, updateTask);
+router.delete("/tasks/:id", deleteTask);
+
+router.put("/tasks/:id", updateTask);
 
 export default router;
