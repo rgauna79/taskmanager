@@ -45,7 +45,7 @@ function TasksPage() {
   }
 
   if (error) return <h1>Error: {error}</h1>;
-  if (tasks.length == 0) return <h1>No Tasks</h1>;
+  // if (tasks.length == 0) return <h1>No Tasks</h1>;
   return (
     <>
       <div className="d-flex justify-content-between align-items-center p-3 flex-wrap gap-3">

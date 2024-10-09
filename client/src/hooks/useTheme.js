@@ -7,10 +7,10 @@ export const useTheme = () => {
     const currentTheme = localStorage.getItem("theme");
     if (currentTheme === "dark") {
       setIsDarkMode(true);
-      document.documentElement.setAttribute("data-bs-theme", "dark"); // Cambiar tema a oscuro
+      document.documentElement.setAttribute("data-bs-theme", "dark");
     } else {
       setIsDarkMode(false);
-      document.documentElement.setAttribute("data-bs-theme", "light"); // Cambiar tema a claro
+      document.documentElement.setAttribute("data-bs-theme", "light");
     }
   }, []);
 
@@ -21,7 +21,7 @@ export const useTheme = () => {
       document.documentElement.setAttribute(
         "data-bs-theme",
         newTheme ? "dark" : "light"
-      ); // Cambiar tema
+      );
       return newTheme;
     });
   };

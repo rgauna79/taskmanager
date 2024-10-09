@@ -75,7 +75,7 @@ function TaskCard({ task }) {
         <input
           id={`task-status-${task._id}`}
           type="checkbox"
-          checked={task.status}
+          checked={task.status != undefined ? task.status : false}
           onChange={handleStatusChange}
           className="form-check-input me-2"
           disabled={isExpired && task.status}

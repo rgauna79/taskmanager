@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 
 function HomePage() {
   const { isAuthenticated } = useAuth();
+
+  // Redirect to /tasks if the user is authenticated
   if (isAuthenticated) {
     return <Navigate to="/tasks" />;
   }
@@ -18,15 +20,22 @@ function HomePage() {
                   Welcome to React Tasks
                 </h1>
                 <p className="card-text">
-                  Organize your tasks efficiently with React Tasks
+                  Organize your tasks efficiently with React Tasks.
                 </p>
-                <Link to="/register" className="btn btn-primary btn-lg mt-4">
-                  Get Started
+                {/* Link to start using the app without logging in */}
+                <Link to="/tasks" className="btn btn-primary btn-lg mt-4">
+                  Start without logging in
                 </Link>
                 <p className="d-flex justify-content-center align-items-center mt-4">
                   Already have an account?
                   <Link to="/login" className="text-primary ms-2">
                     Login
+                  </Link>
+                </p>
+                <p className="d-flex justify-content-center align-items-center mt-2">
+                  Don't have an account?
+                  <Link to="/register" className="text-primary ms-2">
+                    Register
                   </Link>
                 </p>
               </div>

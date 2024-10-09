@@ -1,96 +1,78 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { Navbar, Nav } from "react-bootstrap";
-import { useState } from "react";
+import { Navbar } from "react-bootstrap";
 import { useTheme } from "../../hooks/useTheme";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon, FaSignOutAlt, FaUser, FaSignInAlt, FaTasks } from "react-icons/fa";
+import { Tooltip, OverlayTrigger } from "react-bootstrap";
 import { toast } from "react-toastify";
 
 function CustomNavbar() {
   const { isAuthenticated, logout, user } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
   const { toggleTheme, isDarkMode } = useTheme();
-
-  const handleToggle = () => setIsOpen(!isOpen);
-  const handleClose = () => setIsOpen(false);
-
-  const handleLinkClick = () => {
-    handleClose();
-  };
 
   const handleLogout = () => {
     logout();
-    handleClose();
     toast.success("Logged out successfully");
   };
 
   return (
-    <Navbar bg="secondary" expand="lg" className=" my-1 rounded p-2 mx-2">
+    <Navbar bg="secondary" className="my-1 rounded p-3 mx-2 justify-content-between">
       <Navbar.Brand>
-        <Link
-          to={isAuthenticated ? "/tasks" : "/"}
-          className="text-white text-decoration-none"
-          onClick={handleLinkClick}
-        >
-          <h1 className="fs-1 fw-bold">Task manager</h1>
-          <button
-            onClick={toggleTheme}
-            className="btn btn-secondary px-0 py-1 rounded d-flex align-items-center"
-            aria-label="Toggle Dark Mode"
-          >
-            {isDarkMode ? <FaSun /> : <FaMoon />}
-          </button>
+        <Link to={isAuthenticated ? "/tasks" : "/"} className="text-white text-decoration-none">
+          <h1 className="fs-1 fw-bold">Task Manager</h1>
         </Link>
       </Navbar.Brand>
-      <Navbar.Toggle onClick={handleToggle} aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav" in={isOpen} onExited={handleClose}>
-        <Nav className="ml-auto mr-3 align-items-end gap-2 py-1">
-          {isAuthenticated ? (
-            <>
-              <Nav.Item>Welcome {user.username}</Nav.Item>
-              <Nav.Item>
-                <Link
-                  to="/add-task"
-                  className="text-white bg-primary px-4 py-1 rounded text-decoration-none"
-                  onClick={handleLinkClick}
-                >
-                  Add Task
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link
-                  to="/"
-                  className="text-white bg-primary px-4 py-1 rounded text-decoration-none"
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Link>
-              </Nav.Item>
-            </>
-          ) : (
-            <>
-              <Nav.Item>
-                <Link
-                  to="/login"
-                  className="text-white bg-primary px-4 py-1 rounded text-decoration-none"
-                  onClick={handleLinkClick}
-                >
-                  Login
-                </Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Link
-                  to="/register"
-                  className="text-white bg-primary px-4 py-1 rounded text-decoration-none"
-                  onClick={handleLinkClick}
-                >
-                  Register
-                </Link>
-              </Nav.Item>
-            </>
-          )}
-        </Nav>
-      </Navbar.Collapse>
+      <div className="d-flex align-items-center" >
+        <button
+          onClick={toggleTheme}
+          className="btn btn-secondary me-3"
+          aria-label="Toggle Dark Mode"
+        >
+          {isDarkMode ? <FaSun /> : <FaMoon />}
+        </button>
+
+        <OverlayTrigger
+          placement="bottom"
+          overlay={<Tooltip id="tooltip-my-tasks">My Tasks</Tooltip>}
+        >
+          <Link to="/tasks" className="nav-icon text-white me-3">
+            <FaTasks size={24} />
+          </Link>
+        </OverlayTrigger>
+
+        {isAuthenticated ? (
+          <>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip-logout">Logout</Tooltip>}
+            >
+              <button onClick={handleLogout} className="nav-icon text-white bg-transparent border-0 me-2" aria-label="Logout">
+                <FaSignOutAlt size={24} />
+              </button>
+            </OverlayTrigger>
+            <span className="text-white me-2">Welcome, {user.username}</span>
+          </>
+        ) : (
+          <>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip-login">Login</Tooltip>}
+            >
+              <Link to="/login" className="nav-icon text-white me-3">
+                <FaSignInAlt size={24} />
+              </Link>
+            </OverlayTrigger>
+            <OverlayTrigger
+              placement="bottom"
+              overlay={<Tooltip id="tooltip-register">Register</Tooltip>}
+            >
+              <Link to="/register" className="nav-icon text-white me-3">
+                <FaUser size={24} />
+              </Link>
+            </OverlayTrigger>
+          </>
+        )}
+      </div>
     </Navbar>
   );
 }
