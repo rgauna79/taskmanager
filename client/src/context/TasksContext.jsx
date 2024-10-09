@@ -1,4 +1,10 @@
-import { createContext, useCallback, useContext, useState, useEffect } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useState,
+  useEffect,
+} from "react";
 import {
   createTasksRequest,
   getTaskRequest,
@@ -39,10 +45,10 @@ export function TaskProvider({ children }) {
     } else if (isAuthenticated) {
       getTasks();
     }
-  },[isAuthenticated] );
+  }, [isAuthenticated]);
 
   const getTasks = useCallback(async () => {
-    if ( isAuthenticated ) {
+    if (isAuthenticated) {
       try {
         const res = await getTasksRequest();
         setTasks(res.data);
@@ -52,9 +58,7 @@ export function TaskProvider({ children }) {
         console.error("error: " + error);
       }
     } else {
-
     }
-    
   }, [isAuthenticated]);
 
   const getTask = async (id) => {
@@ -68,11 +72,10 @@ export function TaskProvider({ children }) {
         console.error(error.message);
       }
     } else {
-      
       const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
-      const response = storedTasks.find((task) => task._id === Number(id))
-      
-      return { data: response};
+      const response = storedTasks.find((task) => task._id === Number(id));
+
+      return { data: response };
     }
   };
 
@@ -87,7 +90,7 @@ export function TaskProvider({ children }) {
         console.error(error);
       }
     } else {
-      const newTask = {...task, _id: Date.now() }
+      const newTask = { ...task, _id: Date.now() };
       setTasks([...tasks, newTask]);
       // alert("create new task")
     }
@@ -107,7 +110,6 @@ export function TaskProvider({ children }) {
       }
     } else {
       setTasks(tasks.filter((task) => task._id != id));
-
     }
   };
 
@@ -123,7 +125,9 @@ export function TaskProvider({ children }) {
         console.error(error);
       }
     } else {
-      setTasks(tasks.map((t) => (String(t._id) === String(id) ? { ...t, ...task } : t)));
+      setTasks(
+        tasks.map((t) => (String(t._id) === String(id) ? { ...t, ...task } : t))
+      );
     }
   };
 
@@ -131,11 +135,11 @@ export function TaskProvider({ children }) {
     if (isAuthenticated) {
       try {
         const res = await updateTasksRequest(id, { status });
-  
+
         setTasks((prevTasks) =>
           prevTasks.map((task) => (task._id === id ? res.data : task))
         );
-  
+
         setError(null);
       } catch (error) {
         setError(error.message);
@@ -143,8 +147,8 @@ export function TaskProvider({ children }) {
       }
     } else {
       setTasks((prevTasks) =>
-          prevTasks.map((task) => (task._id === id ? {...task, status} : task))
-        ); 
+        prevTasks.map((task) => (task._id === id ? { ...task, status } : task))
+      );
     }
   };
 

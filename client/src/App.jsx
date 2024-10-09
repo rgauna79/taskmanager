@@ -33,17 +33,17 @@ function App() {
           >
             <Navbar />
 
-            <main className="d-flex flex-column flex-grow-1 align-items-center justify-content-center  container-fluid px-2">
+            <main className="d-flex flex-column  align-items-center justify-content-center  container-fluid px-2">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
 
                 {/* <Route element={<ProtectedRoutes />}> */}
-                  <Route path="/tasks" element={<TasksPage />} />
-                  <Route path="/add-task" element={<TaskFormPage />} />
-                  <Route path="/tasks/:id" element={<TaskFormPage />} />
-                  <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/tasks" element={<TasksPage />} />
+                <Route path="/add-task" element={<TaskFormPage />} />
+                <Route path="/tasks/:id" element={<TaskFormPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 {/* </Route> */}
               </Routes>
               <ToastContainer position="top-right" autoClose={2000} />

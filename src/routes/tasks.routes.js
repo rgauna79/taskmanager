@@ -12,7 +12,7 @@ import { createTaskSchema } from "../schemas/task.schema.js";
 
 const router = Router();
 
-// router.use(auth);
+router.use(auth);
 
 router.get("/tasks", getTasks);
 
