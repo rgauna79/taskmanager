@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
-import User from "../models/user.models.js";
+// import User from "../models/user.models.js";
 
 const publicRoutes = ["/tasks"];
 
 export const auth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
+    console.log(token);
 
     const authHeader = req.headers.authorization;
     console.log(
