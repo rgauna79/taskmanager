@@ -9,9 +9,9 @@ const publicRoutes = [
 
 export const auth = async (req, res, next) => {
   try {
-
+    let { token } = req.cookies;
     if (publicRoutes.includes(req.path)) {
-      let { token } = req.cookies;
+      
 
       if (!token) {
         const authHeader = req.headers.authorization;
