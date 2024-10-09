@@ -8,22 +8,13 @@ export const auth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
 
-    const authHeader = req.headers.authorization;
-    console.log(
-      "token status: ",
-      !token,
-      " authHeader content: ",
-      authHeader.startsWith("Bearer ")
-    );
     if (!token) {
       if (authHeader.startsWith("Bearer ")) {
         token = authHeader.split(" ")[1];
       }
     }
-    console.log(token);
 
     if (publicRoutes.includes(req.path)) {
-      console.log("checking token in task route");
       if (!token) {
         return res
           .status(401)
