@@ -8,19 +8,20 @@ export const auth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
 
+    const authHeader = req.headers.authorization;
+    if (!token && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
+
     if (publicRoutes.includes(req.path)) {
       console.log("checking token in task route");
       if (!token) {
-        const authHeader = req.headers.authorization;
-
-        if (!authHeader || !authHeader.startsWith("Bearer ")) {
-          return res
-            .status(401)
-            .json({ message: "No token, authorization denied" });
-        }
-        token = authHeader.split(" ")[1];
-        console.log("token: ", token);
+        return res
+          .status(401)
+          .json({ message: "No token, authorization denied" });
       } else {
+        console.log("No token in session with no user");
+
         return next();
       }
     }
