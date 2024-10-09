@@ -16,8 +16,10 @@ export const auth = async (req, res, next) => {
       " authHeader content: ",
       authHeader.startsWith("Bearer ")
     );
-    if (!token && authHeader.startsWith("Bearer ")) {
-      token = authHeader.split(" ")[1];
+    if (!token) {
+      if (authHeader.startsWith("Bearer ")) {
+        token = authHeader.split(" ")[1];
+      }
     }
 
     if (publicRoutes.includes(req.path)) {
