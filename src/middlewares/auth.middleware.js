@@ -9,22 +9,22 @@ const publicRoutes = [
 
 export const auth = async (req, res, next) => {
   try {
-    
+
     if (publicRoutes.includes(req.path)) {
-      return next();
-    }
+      let { token } = req.cookies;
 
-    let { token } = req.cookies;
+      if (!token) {
+        const authHeader = req.headers.authorization;
 
-    if (!token) {
-      const authHeader = req.headers.authorization;
-
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return res
-          .status(401)
-          .json({ message: "No token, authorization denied" });
+        if (!authHeader || !authHeader.startsWith("Bearer ")) {
+          return res
+            .status(401)
+            .json({ message: "No token, authorization denied" });
+        }
+        token = authHeader.split(" ")[1];
+      } else {
+        return next();
       }
-      token = authHeader.split(" ")[1];
     }
 
     jwt.verify(token, TOKEN_SECRET, async (err, user) => {
