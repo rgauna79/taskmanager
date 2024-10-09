@@ -7,7 +7,6 @@ const publicRoutes = ["/tasks"];
 export const auth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
-    console.log(token);
 
     const authHeader = req.headers.authorization;
     console.log(
@@ -21,6 +20,7 @@ export const auth = async (req, res, next) => {
         token = authHeader.split(" ")[1];
       }
     }
+    console.log(token);
 
     if (publicRoutes.includes(req.path)) {
       console.log("checking token in task route");
@@ -28,10 +28,6 @@ export const auth = async (req, res, next) => {
         return res
           .status(401)
           .json({ message: "No token, authorization denied" });
-      } else {
-        console.log("No token in session with no user");
-
-        return next();
       }
     }
 
