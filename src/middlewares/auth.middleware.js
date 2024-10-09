@@ -2,17 +2,13 @@ import jwt from "jsonwebtoken";
 import { TOKEN_SECRET } from "../config.js";
 import User from "../models/user.models.js";
 
-
-const publicRoutes = [
-  "/tasks", 
-];
+const publicRoutes = ["/tasks"];
 
 export const auth = async (req, res, next) => {
   try {
     let { token } = req.cookies;
-    if (publicRoutes.includes(req.path)) {
-      
 
+    if (publicRoutes.includes(req.path)) {
       if (!token) {
         const authHeader = req.headers.authorization;
 
