@@ -9,6 +9,7 @@ export const auth = async (req, res, next) => {
     let { token } = req.cookies;
 
     if (!token) {
+      const authHeader = req.headers.authorization;
       if (authHeader.startsWith("Bearer ")) {
         token = authHeader.split(" ")[1];
       }
