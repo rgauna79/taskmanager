@@ -5,5 +5,20 @@ ul {
   list-style: none;
 }
 [data-bs-theme="ligth"] .bg-secondary {
-  background-color: #2052b6; /* Color específico para el tema oscuro */
+  background-color: #2052b6; 
+}
+
+.btn-outline-primary .svg-inline--fa {
+  width: 1em;
+  height: 1em;
+}
+
+/* Opcional: Añadir margen entre el label y el botón */
+.filters-header {
+  display: flex;
+  align-items: center;
+}
+
+.filters-header h5 {
+  margin-right: 0.5rem;
 }

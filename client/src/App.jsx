@@ -33,7 +33,7 @@ function App() {
           >
             <Navbar />
 
-            <main className="d-flex flex-column  align-items-center justify-content-center  container-fluid px-2">
+            <main className="d-flex flex-column  align-items-center justify-content-center  container-fluid px-2 flex-grow-1">
               <Routes>
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />

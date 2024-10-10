@@ -34,9 +34,9 @@ export function TaskProvider({ children }) {
 
   const allTags = [...new Set(tasks.flatMap((task) => task.tags))];
 
-  // useEffect(() => {
-  //   localStorage.setItem("tasks", JSON.stringify(tasks));
-  // }, [tasks]);
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem("tasks"));

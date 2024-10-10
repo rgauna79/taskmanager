@@ -70,6 +70,7 @@ export const AuthProvider = ({ children }) => {
       Cookies.remove("authToken");
       setIsAuthenticated(false);
       setUser(null);
+      window.location.reload();
     } catch (error) {
       console.log("Error during logout:", error);
     }

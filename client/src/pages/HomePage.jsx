@@ -10,7 +10,7 @@ function HomePage() {
   }
 
   return (
-    <section className="d-flex justify-content-center align-items-center flex-grow-1">
+    <section className="d-flex justify-content-center align-items-center ">
       <div className="container">
         <div className="row">
           <div className="col-12 col-sm-10 col-md-8 offset-md-2">
